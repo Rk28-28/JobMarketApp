@@ -38,7 +38,7 @@ class CustomBottomAppBar extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => MyHomePage()),
+              MaterialPageRoute(builder: (_) => HomePage()),
             ),
             color: selectedIndex == 2 ? Colors.blue : Colors.grey,
           ),
