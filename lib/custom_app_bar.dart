@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groupb_final/views/money_page_views/main_money_page_component.dart';
 import 'package:groupb_final/views/search_page_views/main_search_page_component.dart';
-import 'package:groupb_final/views/sound_page_views/main_sound_page_component.dart';
+import 'package:groupb_final/views/account_page_views/main_account_page_component.dart';
 import 'package:groupb_final/views/video_page_views/main_video_page_component.dart';
 
 import 'home_page.dart';
@@ -29,9 +29,9 @@ class CustomBottomAppBar extends StatelessWidget {
             color: selectedIndex == 0 ? Colors.blue : Colors.grey,
           ),
           IconButton(
-            icon: Icon(Icons.volume_up),
+            icon: Icon(Icons.attach_money),
             onPressed: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => SoundPage()),
+              MaterialPageRoute(builder: (_) => MoneyPage()),
             ),
             color: selectedIndex == 1 ? Colors.blue : Colors.grey,
           ),
@@ -50,9 +50,9 @@ class CustomBottomAppBar extends StatelessWidget {
             color: selectedIndex == 3 ? Colors.blue : Colors.grey,
           ),
           IconButton(
-            icon: Icon(Icons.attach_money),
+            icon: Icon(Icons.person),
             onPressed: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => MoneyPage()),
+              MaterialPageRoute(builder: (_) => AccountPage()),
             ),
             color: selectedIndex == 4 ? Colors.blue : Colors.grey,
           ),
