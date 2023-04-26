@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CitySearchPage extends StatefulWidget {
@@ -12,9 +13,17 @@ class _CitySearchPageState extends State<CitySearchPage> {
 
   String? dropdownValue;
   var CityPicked;
+
+
+
   List<String> Cities = <String>[
     'Akron, OK',
     'Albany, NY',
+    '',
+    '',
+    '',
+    '',
+    '',
   ];
 
   @override
@@ -41,7 +50,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
         )
     );
   }
-
 }
+
 
 
