@@ -70,35 +70,14 @@ class _WatchVideosScreen extends State<WatchVideosScreen> {
   }
 }
 
-class SoundsScreen extends StatelessWidget {
-
+class SoundsScreen extends StatefulWidget {
+  @override
+  _SoundsScreen createState() => _SoundsScreen();
+}
+class _SoundsScreen extends State<SoundsScreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Youtube Player Flutter',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          color: Colors.blueAccent,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w300,
-            fontSize: 20,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.blueAccent,
-        ),
-      ),
-      home: SoundsPage(),
-    );
+    return new SoundsPage();
   }
 }
 
-/*class _SoundsScreen extends State<SoundsScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return SoundsPage();
-  }
-}*/
