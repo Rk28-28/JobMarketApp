@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.groupb_final">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="groupb_final"
         android:name="${applicationName}"

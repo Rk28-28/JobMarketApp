@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'home_page.dart';
 
 class AuthenticationService {
@@ -50,7 +51,7 @@ class LoginPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 400, left: 80, right: 80),
                     child: ElevatedButton(
-                      onPressed: () {login(context);},
+                      onPressed: () {loginWithGoogle(context);},
                       style: ElevatedButton.styleFrom(
                         elevation: 20,
                         backgroundColor: Colors.grey,
@@ -86,7 +87,19 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Future<void> login(BuildContext context) async {
+  Future<void> loginWithGoogle(BuildContext context) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+      await googleSignInAccount.authentication;
+      final AuthCredential authCredential = GoogleAuthProvider.credential(
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken);
+
+      UserCredential result = await auth.signInWithCredential(authCredential);
+    }
   }
 }
