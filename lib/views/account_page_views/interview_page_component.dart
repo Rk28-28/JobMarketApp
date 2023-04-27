@@ -8,7 +8,9 @@ class InterviewPage extends StatefulWidget {
     _InterviewPageState createState() => _InterviewPageState();
 }
 
-TextEditingController dateController = new TextEditingController();
+TextEditingController sendDateController = new TextEditingController();
+TextEditingController retrieveDateController = new TextEditingController();
+TextEditingController timeController = new TextEditingController();
 class _InterviewPageState extends State<InterviewPage> {
 
 @override
@@ -34,7 +36,7 @@ Widget build(BuildContext context) {
 
 
               TextField(
-                  controller: dateController, //editing controller of this TextField
+                  controller: timeController, //editing controller of this TextField
                   style: TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_today), //icon of text field
@@ -53,7 +55,7 @@ Widget build(BuildContext context) {
                     if(pickedDate != null ){
                       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                       setState(() {
-                        dateController.text = formattedDate; //set formatted date to TextField value.
+                        sendDateController.text = formattedDate; //set formatted date to TextField value.
                       });
                     }
                   }
@@ -61,7 +63,7 @@ Widget build(BuildContext context) {
               Padding(
                 padding: EdgeInsets.fromLTRB(8,8,8,16),
                 child: TextFormField(
-                  controller: dateController,
+                  controller: timeController,
 
                   decoration: InputDecoration(
                     filled: true,
@@ -87,7 +89,7 @@ Widget build(BuildContext context) {
               ),
 
               TextField(
-                  controller: dateController, //editing controller of this TextField
+                  controller: retrieveDateController, //editing controller of this TextField
                   style: TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_today), //icon of text field
@@ -106,9 +108,9 @@ Widget build(BuildContext context) {
                     if(pickedDate != null ){
                       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                       setState(() {
-                        dateController.text = formattedDate; //set formatted date to TextField value.
+                        retrieveDateController.text = formattedDate; //set formatted date to TextField value.
                       });
-                    }
+                    }//
                   }
               ),
             ],
