@@ -4,6 +4,7 @@ import 'package:groupb_final/login_page.dart';
 import 'home_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
