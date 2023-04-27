@@ -102,8 +102,6 @@ class _CitySearchPageState extends State<CitySearchPage> {
           title: Text('Search for Jobs Based on City'),
         ),
         body: Center(
-    child:SingleChildScrollView(
-    scrollDirection: Axis.vertical,
           child: DropdownButton(
               hint: Text("Select A City"),
               value: CityPicked,
@@ -118,7 +116,6 @@ class _CitySearchPageState extends State<CitySearchPage> {
                   CityPicked = value;
                 });
               }),
-        ),
         ),
     );
   }
