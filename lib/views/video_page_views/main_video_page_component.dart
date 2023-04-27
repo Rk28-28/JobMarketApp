@@ -74,10 +74,10 @@ class SoundsScreen extends StatefulWidget {
   @override
   _SoundsScreen createState() => _SoundsScreen();
 }
-
 class _SoundsScreen extends State<SoundsScreen> {
   @override
   Widget build(BuildContext context) {
     return new SoundsPage();
   }
 }
+
