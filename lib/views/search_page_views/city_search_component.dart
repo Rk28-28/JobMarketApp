@@ -102,7 +102,8 @@ class _CitySearchPageState extends State<CitySearchPage> {
         appBar: AppBar(
           title: Text('Search for Jobs Based on City'),
         ),
-        body: Column(
+        body: Container(
+          child:Column(
           children:[
             DropdownButton(
                 hint: Text("Select A City"),
@@ -138,14 +139,13 @@ class _CitySearchPageState extends State<CitySearchPage> {
 
                   // Extracting data from snapshot object
                   final data = snapshot.data as String;
+                  //print("Data" + data);
 
                   return Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      loop(data),
-                      style: TextStyle(fontSize: 14.4,color: Colors.white),
-
-
+                      data,
+                      style: TextStyle(fontSize: 14.4,color: Colors.black),
                     ),
                   );
                 }
@@ -161,46 +161,30 @@ class _CitySearchPageState extends State<CitySearchPage> {
             // inorder to display something on the Canvas
             future: getdata(CityPicked),
           ),
-          /*child: DropdownButton(
-              hint: Text("Select A City"),
-              value: CityPicked,
-              items: Cities.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  CityPicked = value;
-                });
-              }),*/
     ],
+        ),
         ),
     );
   }
 
-  Future<String> getdata(CityPicked) async {
+}
+Future<String> getdata(cityPicked) async {
 
-    DocumentReference<Map<String, dynamic>> diaryRef = FirebaseFirestore
-        .instance
-        .collection('CityData')
-        .doc(CityPicked);
+  DocumentReference<Map<String, dynamic>> diaryRef = FirebaseFirestore
+      .instance
+      .collection('CityData')
+      .doc(cityPicked);
 
-    String x = "";
-    await diaryRef.get().then(
+  String x = "";
+  await diaryRef.get().then(
           (querySnapshot) {
         print("Successfully completed");
-          x += querySnapshot.data().toString();
-        }
-    );
-    return x;
-  }
-
-  String loop(String data) {
-    String s = data.toString();
-    return s;
-  }
+        x += querySnapshot.data().toString();
+        //print(x);
+      }
+  );
+  //print("Outside of Loop"+ x);
+  return x;
 }
 
 
