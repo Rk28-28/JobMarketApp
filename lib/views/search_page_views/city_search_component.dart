@@ -186,10 +186,10 @@ class _CitySearchPageState extends State<CitySearchPage> {
             unadjustedsalary =
                 querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted');
 
-            x += '\n\n'+" Number Of Software Developer Jobs: " +
+            x += '\n\n'+" Number Of Software Developer Jobs: \$" +
                 querySnapshot.get('numberOfSoftwareDeveloperJobs').toString() +
                 '\n\n';
-            x += " Adjusted Mean Salary: " +
+            x += " Adjusted Mean Salary: \$" +
                 querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted')
                     .toString() + '\n\n';
             x += " Unadjusted Mean Salary: " +
