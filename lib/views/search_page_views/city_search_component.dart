@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //test
 class CitySearchPage extends StatefulWidget {
@@ -101,8 +102,66 @@ class _CitySearchPageState extends State<CitySearchPage> {
         appBar: AppBar(
           title: Text('Search for Jobs Based on City'),
         ),
-        body: Center(
-          child: DropdownButton(
+        body: Column(
+          children:[
+            DropdownButton(
+                hint: Text("Select A City"),
+                value: CityPicked,
+                alignment: AlignmentDirectional.center,
+                items: Cities.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    CityPicked = value;
+                  });
+                }),
+
+          FutureBuilder(
+            builder: (ctx, snapshot) {
+              // Checking if future is resolved or not
+              if (snapshot.connectionState == ConnectionState.done) {
+                // If we got an error
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      '${snapshot.error} occurred',
+                      style: TextStyle(fontSize: 19),
+                    ),
+                  );
+
+                  // if we got our data
+                } else if (snapshot.hasData) {
+
+                  // Extracting data from snapshot object
+                  final data = snapshot.data as String;
+
+                  return Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      loop(data),
+                      style: TextStyle(fontSize: 14.4,color: Colors.white),
+
+
+                    ),
+                  );
+                }
+              }
+
+              // Displaying LoadingSpinner to indicate waiting state
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+
+            // Future that needs to be resolved
+            // inorder to display something on the Canvas
+            future: getdata(CityPicked),
+          ),
+          /*child: DropdownButton(
               hint: Text("Select A City"),
               value: CityPicked,
               items: Cities.map<DropdownMenuItem<String>>((String value) {
@@ -115,9 +174,32 @@ class _CitySearchPageState extends State<CitySearchPage> {
                 setState(() {
                   CityPicked = value;
                 });
-              }),
+              }),*/
+    ],
         ),
     );
+  }
+
+  Future<String> getdata(CityPicked) async {
+
+    DocumentReference<Map<String, dynamic>> diaryRef = FirebaseFirestore
+        .instance
+        .collection('CityData')
+        .doc(CityPicked);
+
+    String x = "";
+    await diaryRef.get().then(
+          (querySnapshot) {
+        print("Successfully completed");
+          x += querySnapshot.data().toString();
+        }
+    );
+    return x;
+  }
+
+  String loop(String data) {
+    String s = data.toString();
+    return s;
   }
 }
 
