@@ -2,23 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'home_page.dart';
-
-class AuthenticationService {
-  handleAuthState() {
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasData) {
-            // If user is logged in go to HomePage
-            return HomePage();
-          } else {
-            // If user is not logged in go to login page
-            return LoginPage();
-          }
-        });
-  }
-}
 
 class LoginPage extends StatelessWidget {
   @override
@@ -80,6 +63,38 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, left: 80, right: 80),
+                    child: ElevatedButton(
+                      onPressed: () {loginAnonymously(context);},
+                      style: ElevatedButton.styleFrom(
+                          elevation: 20,
+                          backgroundColor: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)
+                          )
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/androidperson.png'),
+                                  fit: BoxFit.cover,
+                                )),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 30.0),
+                            child: Text(
+                                "Sign In Anonymously"
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ]),
           )
         ],
@@ -101,5 +116,9 @@ class LoginPage extends StatelessWidget {
 
       UserCredential result = await auth.signInWithCredential(authCredential);
     }
+  }
+
+  Future<void> loginAnonymously(BuildContext context) async {
+    final userCredential = await FirebaseAuth.instance.signInAnonymously();
   }
 }

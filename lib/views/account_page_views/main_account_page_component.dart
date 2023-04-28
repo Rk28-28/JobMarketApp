@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:groupb_final/main.dart';
+import '../../login_page.dart';
 import '../../custom_app_bar.dart';
 import 'career_goal_page_component.dart';
 import 'job_journal_page_component.dart';
@@ -26,44 +28,71 @@ class _AccountPageState extends State<AccountPage> {
       ),
       body: Center(
         child: Padding(
-    padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
-              onPressed: () { // Navigator to Extra Info screen
-              Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                return JobJournalScreen();
-                }));
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                getUserName()
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator to Extra Info screen
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (BuildContext context) {
+                    return JobJournalScreen();
+                  }));
                 },
-              child: Text('My Job Search Journal'),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () { // Navigator to Extra Info screen
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                  return CareerGoalsScreen();
-                }));
-              },
-              child: Text('My Career Goals'),
-            ),
-            ElevatedButton(
-              onPressed: () { // Navigator to Extra Info screen
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                  return InterviewScreen();
-                }));
-              },
-              child: Text('Set/View Interviews'),
-            ),
-
-           // TODO: Add logout button here?
-
-          ],
+                child: Text('My Job Search Journal'),
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator to Extra Info screen
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (BuildContext context) {
+                    return CareerGoalsScreen();
+                  }));
+                },
+                child: Text('My Career Goals'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator to Extra Info screen
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (BuildContext context) {
+                    return InterviewScreen();
+                  }));
+                },
+                child: Text('Set/View Interviews'),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                    /* This is used to navigate back to the login screen when signed out,
+                  otherwise it will stay frozen on the accounts page, don't ask me why
+                  this works
+                  */
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (_) => false);
+                  },
+                  child: Text('Logout'))
+            ],
+          ),
         ),
       ),
-      ),
     );
+  }
+  String getUserName(){
+    if (FirebaseAuth.instance.currentUser!.isAnonymous) {
+      return "Anonymous";
+    }
+    else {
+      return FirebaseAuth.instance.currentUser!.displayName!;
+    }
   }
 }
 

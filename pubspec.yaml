@@ -37,6 +37,8 @@ dependencies:
   firebase_auth: ^4.4.2
   google_sign_in: ^6.1.0
   cupertino_icons: ^1.0.2
+  youtube_player_flutter: ^8.1.2
+  just_audio: ^0.9.32
 
 
 dev_dependencies:
@@ -67,6 +69,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/googlelogo.png
+    - assets/androidperson.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
