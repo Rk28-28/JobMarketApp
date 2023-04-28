@@ -91,7 +91,7 @@ Widget build(BuildContext context) {
                       );
                       if (newTime != null) {
                         setState(() {
-                          sendTimeController.text = newTime.toString();
+                          sendTimeController.text = newTime.toString().substring(10,15);
                         });
                       }
 
@@ -166,7 +166,7 @@ Widget build(BuildContext context) {
                       );
                       if (newTime != null) {
                         setState(() {
-                          retrieveTimeController.text = newTime.toString();
+                          retrieveTimeController.text = newTime.toString().substring(10,15);
                         });
                       }
 

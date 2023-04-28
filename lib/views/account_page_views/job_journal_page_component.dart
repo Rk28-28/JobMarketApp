@@ -129,7 +129,7 @@ class _JobJournalPageState extends State<JobJournalPage> {
                                   );
                                   if (newTime != null) {
                                     setState(() {
-                                      timeController.text = newTime.toString();
+                                      timeController.text = newTime.toString().substring(10,15);
                                     });
                                   }
 
