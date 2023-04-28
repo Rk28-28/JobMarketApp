@@ -186,13 +186,13 @@ class _CitySearchPageState extends State<CitySearchPage> {
             unadjustedsalary =
                 querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted');
 
-            x += '\n\n'+" Number Of Software Developer Jobs: \$" +
+            x += '\n\n'+" Number Of Software Developer Jobs: " +
                 querySnapshot.get('numberOfSoftwareDeveloperJobs').toString() +
                 '\n\n';
             x += " Adjusted Mean Salary: \$" +
                 querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted')
                     .toString() + '\n\n';
-            x += " Unadjusted Mean Salary: " +
+            x += " Unadjusted Mean Salary: \$" +
                 querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted')
                     .toString() + '\n\n\n\n\n\n\n\n';
           }
@@ -219,15 +219,15 @@ class _CitySearchPageState extends State<CitySearchPage> {
               (querySnapshot) {
             print("Successfully completed");
               //Has more jobs than countnumjobs cities
-              if((querySnapshot.get('numberOfSoftwareDeveloperJobs')) <= numjobs)
+              if((querySnapshot.get('numberOfSoftwareDeveloperJobs')) >= numjobs)
                 {
                   ++countnumjobs;
                 }
-              if((querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted')) <= adjustedsalary)
+              if((querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted')) >= adjustedsalary)
                 {
                 ++countadjustedsalary;
                 }
-              if((querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted'))<= unadjustedsalary)
+              if((querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted')) >= unadjustedsalary)
                 {
                ++countunadjustedsalary;
                 }
@@ -238,13 +238,13 @@ class _CitySearchPageState extends State<CitySearchPage> {
     }
   if(x != "")
   {
-    x += " Number of Software Developer Jobs Ranking: " +
-        countnumjobs.toString() + '\n\n';
+    x += " Software Developer Job Count Ranking: " +
+        countnumjobs.toString() + ' of 77 \n\n';
     x += " Adjusted Mean Salary Ranking: " + countadjustedsalary.toString() +
-        '\n\n';
+        ' of 77 \n\n';
     x +=
         " Unadjusted Mean Salary Ranking: " + countunadjustedsalary.toString() +
-            '\n\n';
+            ' of 77 \n\n';
   }
     //print("Outside of Loop"+ x);
     return x;
