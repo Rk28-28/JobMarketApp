@@ -10,7 +10,8 @@ class InterviewPage extends StatefulWidget {
 
 TextEditingController sendDateController = new TextEditingController();
 TextEditingController retrieveDateController = new TextEditingController();
-TextEditingController timeController = new TextEditingController();
+TextEditingController sendTimeController = new TextEditingController();
+TextEditingController retrieveTimeController = new TextEditingController();
 class _InterviewPageState extends State<InterviewPage> {
 
 @override
@@ -39,7 +40,6 @@ Widget build(BuildContext context) {
 
                   child: TextField(
                       controller: sendDateController, //editing controller of this TextField
-                      style: TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
                         filled: true,
@@ -69,7 +69,7 @@ Widget build(BuildContext context) {
 
               Container(
                 child: TextField(
-                    controller: timeController, //editing controller of this TextField
+                    controller: sendTimeController, //editing controller of this TextField
                     decoration: const InputDecoration(
                       icon: Icon(Icons.access_time), //icon of text field
                       filled: true,
@@ -87,7 +87,7 @@ Widget build(BuildContext context) {
                       );
                       if (newTime != null) {
                         setState(() {
-                          timeController.text = newTime.toString();
+                          sendTimeController.text = newTime.toString();
                         });
                       }
 
@@ -114,7 +114,6 @@ Widget build(BuildContext context) {
 
                   child: TextField(
                       controller: retrieveDateController, //editing controller of this TextField
-                      style: TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
                         filled: true,
@@ -128,8 +127,8 @@ Widget build(BuildContext context) {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(), //get today's date
-                            firstDate:DateTime.now(), //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2100));
+                            firstDate:DateTime(2023), //DateTime.now() - not to allow to choose before today.
+                            lastDate: DateTime(2100)); //t
                         if(pickedDate != null ){
                           String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                           setState(() {
@@ -142,7 +141,7 @@ Widget build(BuildContext context) {
 
               Container(
                 child: TextField(
-                    controller: timeController, //editing controller of this TextField
+                    controller: retrieveTimeController, //editing controller of this TextField
                     decoration: const InputDecoration(
                       icon: Icon(Icons.access_time), //icon of text field
                       filled: true,
@@ -160,7 +159,7 @@ Widget build(BuildContext context) {
                       );
                       if (newTime != null) {
                         setState(() {
-                          timeController.text = newTime.toString();
+                          retrieveTimeController.text = newTime.toString();
                         });
                       }
 
