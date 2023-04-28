@@ -31,7 +31,7 @@ Widget build(BuildContext context) {
 
               const Padding( //Text that displays "Enter a Date"
                 padding: EdgeInsets.fromLTRB(8,16,8,8),
-                child: Text(("Enter a Date for your Interview:"),
+                child: Text(("Schedule a New Interview:"),
                     style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center),
               ),
 
@@ -43,7 +43,8 @@ Widget build(BuildContext context) {
                       decoration: const InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
                         filled: true,
-                        fillColor: Colors.grey,
+                        fillColor: Colors.white70,
+                        hintText: "Enter date",
                       ),
 
                       readOnly: true,
@@ -64,18 +65,36 @@ Widget build(BuildContext context) {
                   )
               ),
 
-              Padding(
-                padding: EdgeInsets.fromLTRB(8,8,8,16),
-                child: TextFormField(
-                  controller: timeController,
 
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.3),
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter the time of the interview',
-                  ),
+
+              Container(
+                child: TextField(
+                    controller: timeController, //editing controller of this TextField
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.access_time), //icon of text field
+                      filled: true,
+                      fillColor: Colors.white70,
+                      hintText: "Enter time",
+                    ),
+
+                    readOnly: true,
+                    onTap: () async {
+                      TimeOfDay _time = TimeOfDay(hour: 12, minute: 00);
+
+                      final TimeOfDay? newTime = await showTimePicker(
+                        context: context,
+                        initialTime: _time,
+                      );
+                      if (newTime != null) {
+                        setState(() {
+                          timeController.text = newTime.toString();
+                        });
+                      }
+
+                    }
                 ),
+
+
               ),
 
               ElevatedButton(
@@ -99,7 +118,8 @@ Widget build(BuildContext context) {
                       decoration: const InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
                         filled: true,
-                        fillColor: Colors.grey,
+                        fillColor: Colors.white70,
+                        hintText: "Enter date",
                       ),
 
                       readOnly: true,
@@ -118,6 +138,42 @@ Widget build(BuildContext context) {
                         }
                       }
                   )
+              ),
+
+              Container(
+                child: TextField(
+                    controller: timeController, //editing controller of this TextField
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.access_time), //icon of text field
+                      filled: true,
+                      fillColor: Colors.white70,
+                      hintText: "Enter time",
+                    ),
+
+                    readOnly: true,
+                    onTap: () async {
+                      TimeOfDay _time = TimeOfDay(hour: 12, minute: 00);
+
+                      final TimeOfDay? newTime = await showTimePicker(
+                        context: context,
+                        initialTime: _time,
+                      );
+                      if (newTime != null) {
+                        setState(() {
+                          timeController.text = newTime.toString();
+                        });
+                      }
+
+                    }
+                ),
+
+
+              ),
+
+              ElevatedButton(
+                onPressed: () { // Send Date to Database
+                },
+                child: Text('Retrieve Interview Info'),
               ),
             ],
           ),

@@ -44,7 +44,7 @@ class _AccountPageState extends State<AccountPage> {
                     return JobJournalScreen();
                   }));
                 },
-                child: Text('My Job Search Journal'),
+                child: Text('My Interview Journal'),
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
