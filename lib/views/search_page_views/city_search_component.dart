@@ -179,7 +179,10 @@ Future<String> getdata(cityPicked) async {
   await diaryRef.get().then(
           (querySnapshot) {
         print("Successfully completed");
-        x += querySnapshot.data().toString();
+        x += "Number Of Software Developer Jobs: "+ querySnapshot.get('numberOfSoftwareDeveloperJobs').toString() + '\n';
+        x += "Software Developer Adjusted Salary Mean: "+ querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted').toString() + '\n';
+        x += "Software Developer Unadjusted Salary Mean: "+ querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted').toString() + '\n';
+       // x += querySnapshot.data().toString();
         //print(x);
       }
   );
