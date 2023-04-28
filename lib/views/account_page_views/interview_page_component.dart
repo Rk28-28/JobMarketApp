@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InterviewPage extends StatefulWidget {
     const InterviewPage({Key? key}) : super(key: key);
@@ -99,6 +103,9 @@ Widget build(BuildContext context) {
 
               ElevatedButton(
                 onPressed: () { // Send Date to Database
+                  sendToDatabase(sendDateController.text.toString(), sendTimeController.text.toString());
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data', style: TextStyle(color: Colors.white))));
                 },
                 child: Text('Set Interview Date/Time'),
               ),
@@ -183,3 +190,17 @@ Widget build(BuildContext context) {
       );
     }
   }
+
+Future<void> sendToDatabase(String dateStr, String timeStr) async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+  final uid = user?.uid;
+
+  DocumentReference<Map<String, dynamic>> interviewJournalRef = FirebaseFirestore.instance.collection('users')
+      .doc(auth.currentUser?.uid).collection(dateStr).doc(timeStr);
+
+  interviewJournalRef.set({
+    'Date of Interview': dateStr,
+    'Time of Interview': timeStr,
+  });
+}
