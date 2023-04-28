@@ -205,9 +205,9 @@ class _CitySearchPageState extends State<CitySearchPage> {
           //print(x);
         }
     );
-    int countnumjobs = 0;
-    int countadjustedsalary = 0;
-    int countunadjustedsalary = 0;
+    int countnumjobs = 1;
+    int countadjustedsalary = 1;
+    int countunadjustedsalary = 1;
     for (int i = 0; i < Cities.length;++i)
     {
       DocumentReference<Map<String, dynamic>> ref = FirebaseFirestore
