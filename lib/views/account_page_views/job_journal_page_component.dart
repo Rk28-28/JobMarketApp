@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class JobJournalPage extends StatefulWidget {
@@ -194,6 +198,8 @@ class _JobJournalPageState extends State<JobJournalPage> {
                         alignment: Alignment.bottomCenter,
                         child: ElevatedButton(
                             onPressed: () {
+                              sendToDatabase(companyController.text.toString(), dateController.text.toString(), timeController.text.toString(),
+                                  responseController.text.toString(), sliderValue);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Processing Data', style: TextStyle(color: Colors.white))));
                             }, child: const Text('Enter', style: TextStyle(fontSize: 18.0))
@@ -211,4 +217,26 @@ class _JobJournalPageState extends State<JobJournalPage> {
 
 
   }
+}
+
+Future<void> sendToDatabase(String jobStr, String dateStr, String timeStr, String feedbackStr, double interviewValue) async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+  final uid = user?.uid;
+
+
+  DateTime now = new DateTime.now();
+  var formatter = new DateFormat('yyyy-MM-dd');
+  String dateStr = formatter.format(now);
+
+  DocumentReference<Map<String, dynamic>> interviewJournalRef = FirebaseFirestore.instance.collection('users')
+      .doc(auth.currentUser?.uid).collection(dateStr).doc(timeStr);
+
+  interviewJournalRef.set({
+    'Company/Job': jobStr,
+    'Date of Interview': dateStr,
+    'Time of Interview': timeStr,
+    'Summary of Interview': feedbackStr,
+    'Interview Rating': interviewValue
+  });
 }
