@@ -145,7 +145,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
                     alignment: Alignment.topLeft,
                     child: Text(
                       data,
-                      style: TextStyle(fontSize: 14.4,color: Colors.black),
+                      style: TextStyle(fontSize: 20,color: Colors.black),
                     ),
                   );
                 }
@@ -179,9 +179,17 @@ Future<String> getdata(cityPicked) async {
   await diaryRef.get().then(
           (querySnapshot) {
         print("Successfully completed");
-        x += "Number Of Software Developer Jobs: "+ querySnapshot.get('numberOfSoftwareDeveloperJobs').toString() + '\n';
-        x += "Software Developer Adjusted Salary Mean: "+ querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted').toString() + '\n';
-        x += "Software Developer Unadjusted Salary Mean: "+ querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted').toString() + '\n';
+        if(querySnapshot.data() != null)
+          {
+            x += " Number Of Software Developer Jobs: "+ querySnapshot.get('numberOfSoftwareDeveloperJobs').toString() + '\n\n';
+            x += " Adjusted Mean Salary: "+ querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted').toString() + '\n\n';
+            x += " Unadjusted Mean Salary: "+ querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted').toString() + '\n\n';
+          }
+        else
+          {
+            x = "";
+          }
+
        // x += querySnapshot.data().toString();
         //print(x);
       }
