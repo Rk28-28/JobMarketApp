@@ -224,11 +224,6 @@ Future<void> sendToDatabase(String jobStr, String dateStr, String timeStr, Strin
   final User? user = auth.currentUser;
   final uid = user?.uid;
 
-
-  DateTime now = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
-  String dateStr = formatter.format(now);
-
   DocumentReference<Map<String, dynamic>> interviewJournalRef = FirebaseFirestore.instance.collection('users')
       .doc(auth.currentUser?.uid).collection(dateStr).doc(timeStr);
 
