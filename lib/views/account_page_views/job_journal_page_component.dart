@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 class JobJournalPage extends StatefulWidget {
@@ -10,9 +11,9 @@ class JobJournalPage extends StatefulWidget {
 
 double sliderValue = 1;
 TextEditingController companyController = new TextEditingController();
-TextEditingController likeController = new TextEditingController();
-TextEditingController dislikeController = new TextEditingController();
-TextEditingController recommendController = new TextEditingController();
+TextEditingController dateController = new TextEditingController();
+TextEditingController timeController = new TextEditingController();
+TextEditingController responseController = new TextEditingController();
 
 class _JobJournalPageState extends State<JobJournalPage> {
 
@@ -20,7 +21,7 @@ class _JobJournalPageState extends State<JobJournalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Job Search Journal'),
+        title: Text('My Interview Journal'),
       ),
 
         body: Container(
@@ -30,18 +31,12 @@ class _JobJournalPageState extends State<JobJournalPage> {
 
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Form( //form
-            child: SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Flexible(
-                    child: Column( //First inner column
-                      children: [
 
                         const Padding(
                           padding: EdgeInsets.fromLTRB(8,16,8,8),
-                          child: Text('What job/company are you writing about?',
+                          child: Text('What job/company were you interviewed for?',
                               style: TextStyle(fontSize: 18.0)
 
                           ),
@@ -50,7 +45,6 @@ class _JobJournalPageState extends State<JobJournalPage> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(8,8,8,16),
                           child: TextFormField(
-                            style: TextStyle(color: Colors.white),
                             controller: companyController,
 
                             decoration: InputDecoration(
@@ -60,78 +54,92 @@ class _JobJournalPageState extends State<JobJournalPage> {
                             ),
 
                           ),
-                        )],
+                        ),
 
-                    ),
-                  ),
-                  Flexible(
-                    child:
-                    Column( //Second inner column
-                        children: [
 
                           const Padding(
                             padding: EdgeInsets.fromLTRB(8,16,8,8),
-                            child: Text('What did you like about this job/company?',
+                            child: Text('What day was your interview?',
                               style: TextStyle(fontSize: 18.0),
 
                             ),
                           ),
 
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8,8,8,16),
-                            child: TextFormField(
-                              controller: likeController,
 
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white.withOpacity(0.3),
-                                  border: OutlineInputBorder(),
-                              ),
+                          Container( //Text box for typing in a date
 
-                            ),
+                              child: TextField(
+                                  controller: dateController, //editing controller of this TextField
+                                  decoration: const InputDecoration(
+                                    icon: Icon(Icons.calendar_today), //icon of text field
+                                    filled: true,
+                                    fillColor: Colors.white70,
+                                  ),
+
+                                  readOnly: true,
+                                  onTap: () async {
+                                    //when click we have to show the datepicker
+                                    DateTime? pickedDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(), //get today's date
+                                        firstDate:DateTime(2023), //DateTime.now() - not to allow to choose before today.
+                                        lastDate: DateTime.now());
+                                    if(pickedDate != null ){
+                                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
+                                      setState(() {
+                                        dateController.text = formattedDate; //set formatted date to TextField value.
+                                      });
+                                    }
+                                  }
+                              )
                           ),
-                        ]    //children
-                    ),
-                  ),
 
-                  Flexible(
-                      child:
-                      Column( //Third inner column
-                      children: [
+
+
+
 
                   const Padding(
                     padding: EdgeInsets.fromLTRB(8,16,8,8),
-                        child: Text('What did you dislike about this job/company?',
+                        child: Text('What time was your interview?',
                         style: TextStyle(fontSize: 18.0),
 
                           ),
                         ),
 
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(8,8,8,16),
-                      child: TextFormField(
-                      controller: likeController,
+                      Container(
+                          child: TextField(
+                              controller: timeController, //editing controller of this TextField
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.access_time), //icon of text field
+                                filled: true,
+                                fillColor: Colors.white70,
+                              ),
 
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.3),
-                      border: OutlineInputBorder(),
+                              readOnly: true,
+                              onTap: () async {
+                                TimeOfDay _time = TimeOfDay(hour: 12, minute: 00);
+
+                                final TimeOfDay? newTime = await showTimePicker(
+                                    context: context,
+                                    initialTime: _time,
+                                  );
+                                  if (newTime != null) {
+                                    setState(() {
+                                      timeController.text = newTime.toString();
+                                    });
+                                  }
+
+                              }
+                          ),
+
+
                       ),
 
-                ),
-                ),
-                ]    //children
-                ),
-                ),
 
-                Flexible(
-                child:
-                Column( //Fourth inner column
-                    children: [
 
-                    const Padding(
+                     const Padding(
                       padding: EdgeInsets.fromLTRB(8,16,8,8),
-                    child: Text('Do you have any recommendations for this job/company?',
+                    child: Text('Describe how your interview went:',
                     style: TextStyle(fontSize: 18.0),
 
                     ),
@@ -140,7 +148,7 @@ class _JobJournalPageState extends State<JobJournalPage> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(8,8,8,16),
                     child: TextFormField(
-                    controller: likeController,
+                    controller: responseController,
 
                     decoration: InputDecoration(
                     filled: true,
@@ -150,14 +158,8 @@ class _JobJournalPageState extends State<JobJournalPage> {
 
                   ),
                   ),
-                  ]    //children
-                  ),
-                  ),
 
-            Flexible(
-              child:
-                    Column(//final inner column
-                      children: [
+
                         const Padding(
                             padding: EdgeInsets.fromLTRB(8,16,8,8),
                             child: Text('How would you rate your interview?', style: TextStyle(fontSize: 18.0),)
@@ -186,9 +188,7 @@ class _JobJournalPageState extends State<JobJournalPage> {
                             ],
                           ),
                         ),
-                      ],//children
-                    ),
-                  ),
+
                   Flexible(
                       child: Align(
                         alignment: Alignment.bottomCenter,
@@ -201,16 +201,14 @@ class _JobJournalPageState extends State<JobJournalPage> {
                       )
                   ),
 
-                ],
+    ],
+    ),
+
               ),
-            ),
-          ),
         ),
+        );
 
 
 
-        )
-
-    );
   }
 }
