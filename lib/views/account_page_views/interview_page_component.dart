@@ -204,8 +204,6 @@ class _InterviewPageState extends State<InterviewPage> {
                       }
                     }
                 ),
-
-
               ),
 
               SizedBox(height: 10),
@@ -225,12 +223,15 @@ class _InterviewPageState extends State<InterviewPage> {
                       } else if (snapshot.hasData) {
                         // Extracting data from snapshot object
                         final data = snapshot.data as String;
+
+                        String singleline = data.replaceAll(",", "\n");
+
                         print("Data :" + data);
                         //String x = loop(getdata());
                         return Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            data,
+                            singleline,
                             style: TextStyle(
                                 fontSize: 14.4, color: Colors.black),
                           ),
@@ -244,8 +245,6 @@ class _InterviewPageState extends State<InterviewPage> {
                     );
                   },
 
-                  // Future that needs to be resolved
-                  // inorder to display something on the Canvas
                   future: retrieveData(retrieveDateController.text.toString(),
                       retrieveTimeController.text.toString())
               ),
@@ -306,7 +305,7 @@ else {
           str += "No Data";
         }
         else {
-          str += querySnapshot.data().toString().substring(1, querySnapshot
+          str += " "+ querySnapshot.data().toString().substring(1, querySnapshot
               .data()
               .toString()
               .length - 1);
