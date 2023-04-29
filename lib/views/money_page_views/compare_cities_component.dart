@@ -13,9 +13,6 @@ class _CompareCityPageState extends State<CompareCityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Compare Cost of Living'),
-      ),
     );
   }
 }

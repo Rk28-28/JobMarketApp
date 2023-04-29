@@ -98,9 +98,6 @@ class _CitySearchPageState extends State<CitySearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Search for Jobs Based on City'),
-      ),
       body: Container(
         child: Column(
           children: [

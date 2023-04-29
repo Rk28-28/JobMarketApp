@@ -30,6 +30,7 @@ class _VideoPageState extends State<VideoPage> {
                 ],
               ),
               title: const Text('Media'),
+              centerTitle: true,
               ),
             bottomNavigationBar: CustomBottomAppBar(
             selectedIndex: _selectedIndex,
@@ -40,35 +41,7 @@ class _VideoPageState extends State<VideoPage> {
         WatchVideosScreen()
       ],
     ),
-    /*body: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
-              onPressed: () { // Navigator to Extra Info screen
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                  return WatchVideosScreen();
-                }));
-              },
-              child: Text('Watch Videos'),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () { // Navigator to Extra Info screen
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                  return SoundsScreen();
-                }));
-              },
-              child: Text('Music & More'),
-            ),
 
-          ],
-        ),
-      ),
-    ),*/
     ),
         ),
     );

@@ -16,7 +16,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: const Text('Home'),
+        centerTitle: true,
         backgroundColor: Colors.brown[100],
       ),
       backgroundColor: Colors.brown[50], // Set background color to tan

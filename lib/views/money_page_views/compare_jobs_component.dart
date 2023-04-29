@@ -13,9 +13,7 @@ class _CompareJobPageState extends State<CompareJobPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Compare Jobs Based on Salary'),
-      ),
+
     );
   }
 }

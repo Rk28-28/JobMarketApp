@@ -16,44 +16,34 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Search Page'),
-      ),
-      bottomNavigationBar: CustomBottomAppBar(
-        selectedIndex: _selectedIndex,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ElevatedButton(
-                onPressed: () { // Navigator to Extra Info screen
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                    return CitySearchScreen();
-                  }));
-                },
-                child: Text('Search Jobs Based on City'),
+    return MaterialApp(
+        home: DefaultTabController(
+          length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.orange[200],
+              bottom: const TabBar(
+                indicatorColor: Colors.green,
+                tabs: [
+                Tab(icon: Icon(Icons.location_city)),
+                Tab(icon: Icon(Icons.monetization_on)),
+                ],
+               ),
+                title: Text('Search Jobs Based On'),
+                centerTitle: true,
               ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () { // Navigator to Extra Info screen
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                    return SalarySearchScreen();
-                  }));
-                },
-                child: Text('Search Jobs Based on Salary'),
-              ),
+              bottomNavigationBar: CustomBottomAppBar(
+              selectedIndex: _selectedIndex,
+            ),
+            body: TabBarView(
+                children: [
+                  CitySearchScreen(),
+                  SalarySearchScreen()
+                  ],
 
-              // TODO: Add logout button here?
-
-            ],
-          ),
-        ),
-      ),
+            )
+    )
+        )
     );
   }
 }
