@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
@@ -24,7 +22,10 @@ class _JobJournalPageState extends State<JobJournalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.brown[100],
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Colors.green[400],
         title: Text('My Interview Journal'),
       ),
 
@@ -38,10 +39,10 @@ class _JobJournalPageState extends State<JobJournalPage> {
               child: Column(
                 children: <Widget>[
 
-                        const Padding(
+                         const Padding(
                           padding: EdgeInsets.fromLTRB(8,16,8,8),
                           child: Text('What job/company were you interviewed for?',
-                              style: TextStyle(fontSize: 18.0)
+                              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)
 
                           ),
                         ),
@@ -61,23 +62,23 @@ class _JobJournalPageState extends State<JobJournalPage> {
                         ),
 
 
-                          const Padding(
+                           const Padding(
                             padding: EdgeInsets.fromLTRB(8,16,8,8),
                             child: Text('What day was your interview?',
-                              style: TextStyle(fontSize: 18.0),
+                              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
 
                             ),
                           ),
 
 
-                          Container( //Text box for typing in a date
-
+                          Center( //Text box for typing in a date
                               child: TextField(
                                   controller: dateController, //editing controller of this TextField
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.calendar_today), //icon of text field
+                                  decoration: InputDecoration(
+                                    //contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                                    icon: const Icon(Icons.calendar_today, color: Colors.black,), //icon of text field
                                     filled: true,
-                                    fillColor: Colors.white70,
+                                    fillColor: Colors.brown[50],
                                   ),
 
                                   readOnly: true,
@@ -102,10 +103,10 @@ class _JobJournalPageState extends State<JobJournalPage> {
 
 
 
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(8,16,8,8),
+                   Padding(
+                    padding: const EdgeInsets.fromLTRB(8,16,8,8),
                         child: Text('What time was your interview?',
-                        style: TextStyle(fontSize: 18.0),
+                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold,),
 
                           ),
                         ),
@@ -113,10 +114,10 @@ class _JobJournalPageState extends State<JobJournalPage> {
                       Container(
                           child: TextField(
                               controller: timeController, //editing controller of this TextField
-                              decoration: const InputDecoration(
-                                icon: Icon(Icons.access_time), //icon of text field
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.access_time, color: Colors.black), //icon of text field
                                 filled: true,
-                                fillColor: Colors.white70,
+                                fillColor: Colors.brown[50],
                               ),
 
                               readOnly: true,
@@ -144,7 +145,7 @@ class _JobJournalPageState extends State<JobJournalPage> {
                      const Padding(
                       padding: EdgeInsets.fromLTRB(8,16,8,8),
                     child: Text('Describe how your interview went:',
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
 
                     ),
                     ),
@@ -166,13 +167,17 @@ class _JobJournalPageState extends State<JobJournalPage> {
 
                         const Padding(
                             padding: EdgeInsets.fromLTRB(8,16,8,8),
-                            child: Text('How would you rate your interview?', style: TextStyle(fontSize: 18.0),)
+                            child: Text('How would you rate your interview?',
+                              style: TextStyle(fontSize: 18.0,
+                                  fontWeight: FontWeight.bold),)
                         ),
 
                         Slider(
                           value: sliderValue,
                           min: 1,
                           max: 5,
+                          activeColor: Colors.green,
+                          inactiveColor: Colors.green[300],
                           divisions: 4,
                           label: sliderValue.round().toString(),
                           onChanged: (double value) {
@@ -197,16 +202,17 @@ class _JobJournalPageState extends State<JobJournalPage> {
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                             onPressed: () {
                               sendToDatabase(companyController.text.toString(), dateController.text.toString(), timeController.text.toString(),
                                   responseController.text.toString(), sliderValue);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Processing Data', style: TextStyle(color: Colors.white))));
-                            }, child: const Text('Enter', style: TextStyle(fontSize: 18.0))
+                            }, child: const Text('Enter', style: TextStyle(fontSize: 18.0, color: Colors.black)
                         ),
                       )
                   ),
-
+                  ),
     ],
     ),
 
