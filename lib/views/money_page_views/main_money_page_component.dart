@@ -16,41 +16,34 @@ class _MoneyPageState extends State<MoneyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Money Page'),
-      ),
-      bottomNavigationBar: CustomBottomAppBar(
-        selectedIndex: _selectedIndex,
-      ),
-      body: Center(
-    child: Padding(
-    padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
-              onPressed: () { // Navigator to Extra Info screen
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                  return CompareCityScreen();
-                }));
-              },
-              child: Text('Compare Cities Based on Cost'),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () { // Navigator to Extra Info screen
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                  return CompareSalaryScreen();
-                }));
-              },
-              child: Text('Compare Jobs Based on Salary'),
-            ),
-          ],
-        ),
-      ),
-      ),
+    return MaterialApp(
+        home: DefaultTabController(
+            length: 2,
+            child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.orange[200],
+                  bottom: const TabBar(
+                    indicatorColor: Colors.green,
+                    tabs: [
+                      Tab(icon: Icon(Icons.location_city)),
+                      Tab(icon: Icon(Icons.work)),
+                    ],
+                  ),
+                  title: Text('Compare'),
+                  centerTitle: true,
+                ),
+                bottomNavigationBar: CustomBottomAppBar(
+                  selectedIndex: _selectedIndex,
+                ),
+                body: TabBarView(
+                  children: [
+                    CompareCityScreen(),
+                    CompareSalaryScreen()
+                  ],
+
+                )
+            )
+        )
     );
   }
 }

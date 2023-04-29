@@ -1,11 +1,13 @@
+
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
+import 'common.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'common.dart';
-// video play code from https://pub.dev/packages/youtube_player_flutter
+// sound player code from https://pub.dev/packages/just_audio
 
 class SoundsPage extends StatefulWidget {
 
@@ -16,12 +18,61 @@ class SoundsPage extends StatefulWidget {
 }
 
 class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
-  final _player = AudioPlayer();
+  late AudioPlayer _player;
+  final _playlist = ConcatenatingAudioSource(children: [
+    // Remove this audio source from the Windows and Linux version because it's not supported yet
+    if (kIsWeb ||
+        ![TargetPlatform.windows, TargetPlatform.linux]
+            .contains(defaultTargetPlatform))
+      ClippingAudioSource(
+        start: const Duration(seconds: 60),
+        end: const Duration(seconds: 90),
+        child: AudioSource.uri(Uri.parse(
+            "https://cdn.transistor.fm/file/transistor/m/shows/36009/28b7b1495bb29b51ccda39d74cb38a66.mp3")),
+        tag: AudioMetadata(
+          album: "Developer Purpose Podcast",
+          title: "One daily habit that changed my developer career",
+          artwork:
+          "assets/256.jpg",
+        ),
+      ),
+    AudioSource.uri(
+      Uri.parse(
+          "https://cdn.simplecast.com/audio/20f35050-e836-44cd-8f7f-fd13e8cb2e44/episodes/1a86efc0-ed64-49e2-904f-026f83321c1e/audio/e4db4d61-e751-4305-bf6a-6ac9f3a30b53/default_tc.mp3?aid=rss_feed&feed=LpAGSLnY"),
+      tag: AudioMetadata(
+        album: "Fragmented - The Software Podcast",
+        title: "How to Land a Job",
+        artwork:
+        "assets/fragmented.jpg",
+      ),
+    ),
+    AudioSource.uri(
+    Uri.parse('assets/star-dance-7999.mp3'),
+      tag: AudioMetadata(
+        album: "Star Dance",
+        title: "Relaxing Music",
+        artwork:
+        "assets/starimage.jpg",
+      ),
+    ),
+    AudioSource.uri(
+      Uri.parse("assets/inner-peace-144554.mp3"),
+      tag: AudioMetadata(
+        album: "Inner Peace",
+        title: "Peaceful Music",
+        artwork:
+        "assets/innerpeace.jpg",
+      ),
+    ),
+  ]);
+  int _addedCount = 0;
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
     super.initState();
     ambiguate(WidgetsBinding.instance)!.addObserver(this);
+    _player = AudioPlayer();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
     ));
@@ -29,8 +80,6 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
   }
 
   Future<void> _init() async {
-    // Inform the operating system of our app's audio attributes etc.
-    // We pick a reasonable default for an app that plays speech.
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
     // Listen to errors during playback.
@@ -38,21 +87,42 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
         onError: (Object e, StackTrace stackTrace) {
           print('A stream error occurred: $e');
         });
-    // Try to load audio from a source and catch any errors.
     try {
-      // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
-      await _player.setAudioSource(AudioSource.uri(Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")));
+      // Preloading audio is not currently supported on Linux.
+      await _player.setAudioSource(_playlist,
+          preload: kIsWeb || defaultTargetPlatform != TargetPlatform.linux);
     } catch (e) {
+      // Catch load errors: 404, invalid url...
       print("Error loading audio source: $e");
     }
+    // Show a snackbar whenever reaching the end of an item in the playlist.
+    _player.positionDiscontinuityStream.listen((discontinuity) {
+      if (discontinuity.reason == PositionDiscontinuityReason.autoAdvance) {
+        _showItemFinished(discontinuity.previousEvent.currentIndex);
+      }
+    });
+    _player.processingStateStream.listen((state) {
+      if (state == ProcessingState.completed) {
+        _showItemFinished(_player.currentIndex);
+      }
+    });
+  }
+
+  void _showItemFinished(int? index) {
+    if (index == null) return;
+    final sequence = _player.sequence;
+    if (sequence == null) return;
+    final source = sequence[index];
+    final metadata = source.tag as AudioMetadata;
+    _scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
+      content: Text('Finished playing ${metadata.title}'),
+      duration: const Duration(seconds: 1),
+    ));
   }
 
   @override
   void dispose() {
     ambiguate(WidgetsBinding.instance)!.removeObserver(this);
-    // Release decoders and buffers back to the operating system making them
-    // available for other apps to use.
     _player.dispose();
     super.dispose();
   }
@@ -67,8 +137,6 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
     }
   }
 
-  /// Collects the data useful for displaying in a seek bar, using a handy
-  /// feature of rx_dart to combine the 3 streams of interest into one.
   Stream<PositionData> get _positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
           _player.positionStream,
@@ -79,18 +147,45 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: _scaffoldMessengerKey,
       home: Scaffold(
+        backgroundColor: Colors.brown[100],
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Display play/pause button and volume/speed sliders.
+              Expanded(
+                child: StreamBuilder<SequenceState?>(
+                  stream: _player.sequenceStateStream,
+                  builder: (context, snapshot) {
+                    final state = snapshot.data;
+                    if (state?.sequence.isEmpty ?? true) {
+                      return const SizedBox();
+                    }
+                    final metadata = state!.currentSource!.tag as AudioMetadata;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child:
+                            Center(child: Image.asset(metadata.artwork)),
+                          ),
+                        ),
+                        Text(metadata.album,
+                            style: Theme.of(context).textTheme.titleLarge),
+                        Text(metadata.title),
+                      ],
+                    );
+                  },
+                ),
+              ),
               ControlButtons(_player),
-              // Display seek bar. Using StreamBuilder, this widget rebuilds
-              // each time the position, buffered position or duration changes.
               StreamBuilder<PositionData>(
                 stream: _positionDataStream,
                 builder: (context, snapshot) {
@@ -100,9 +195,97 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
                     position: positionData?.position ?? Duration.zero,
                     bufferedPosition:
                     positionData?.bufferedPosition ?? Duration.zero,
-                    onChangeEnd: _player.seek,
+                    onChangeEnd: (newPosition) {
+                      _player.seek(newPosition);
+                    },
                   );
                 },
+              ),
+              const SizedBox(height: 8.0),
+              Row(
+                children: [
+                  StreamBuilder<LoopMode>(
+                    stream: _player.loopModeStream,
+                    builder: (context, snapshot) {
+                      final loopMode = snapshot.data ?? LoopMode.off;
+                      const icons = [
+                        Icon(Icons.repeat, color: Colors.black),
+                        Icon(Icons.repeat, color: Colors.orange),
+                        Icon(Icons.repeat_one, color: Colors.orange),
+                      ];
+                      const cycleModes = [
+                        LoopMode.off,
+                        LoopMode.all,
+                        LoopMode.one,
+                      ];
+                      final index = cycleModes.indexOf(loopMode);
+                      return IconButton(
+                        icon: icons[index],
+                        onPressed: () {
+                          _player.setLoopMode(cycleModes[
+                          (cycleModes.indexOf(loopMode) + 1) %
+                              cycleModes.length]);
+                        },
+                      );
+                    },
+                  ),
+                  Expanded(
+                    child: Text(
+                      "Playlist",
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  StreamBuilder<bool>(
+                    stream: _player.shuffleModeEnabledStream,
+                    builder: (context, snapshot) {
+                      final shuffleModeEnabled = snapshot.data ?? false;
+                      return IconButton(
+                        icon: shuffleModeEnabled
+                            ? const Icon(Icons.shuffle, color: Colors.orange)
+                            : const Icon(Icons.shuffle, color: Colors.black),
+                        onPressed: () async {
+                          final enable = !shuffleModeEnabled;
+                          if (enable) {
+                            await _player.shuffle();
+                          }
+                          await _player.setShuffleModeEnabled(enable);
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 240.0,
+                child: StreamBuilder<SequenceState?>(
+                  stream: _player.sequenceStateStream,
+                  builder: (context, snapshot) {
+                    final state = snapshot.data;
+                    final sequence = state?.sequence ?? [];
+                    return ReorderableListView(
+                      onReorder: (int oldIndex, int newIndex) {
+                        if (oldIndex < newIndex) newIndex--;
+                        _playlist.move(oldIndex, newIndex);
+                      },
+                      children: [
+                        for (var i = 0; i < sequence.length; i++)
+                           ListTile(
+                             key: ValueKey(sequence[i]),
+                                title: Text(sequence[i].tag.title as String),
+                                onTap: () {
+                                  _player.seek(Duration.zero, index: i);
+                                },
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.brown)),
+                             tileColor: Colors.brown[50] ,
+                             selectedTileColor: Colors.green,
+
+                           ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -112,7 +295,6 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
   }
 }
 
-/// Displays the play/pause button and volume/speed sliders.
 class ControlButtons extends StatelessWidget {
   final AudioPlayer player;
 
@@ -123,7 +305,6 @@ class ControlButtons extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Opens volume slider dialog
         IconButton(
           icon: const Icon(Icons.volume_up),
           onPressed: () {
@@ -139,11 +320,13 @@ class ControlButtons extends StatelessWidget {
             );
           },
         ),
-
-        /// This StreamBuilder rebuilds whenever the player state changes, which
-        /// includes the playing/paused state and also the
-        /// loading/buffering/ready state. Depending on the state we show the
-        /// appropriate button or loading indicator.
+        StreamBuilder<SequenceState?>(
+          stream: player.sequenceStateStream,
+          builder: (context, snapshot) => IconButton(
+            icon: const Icon(Icons.skip_previous),
+            onPressed: player.hasPrevious ? player.seekToPrevious : null,
+          ),
+        ),
         StreamBuilder<PlayerState>(
           stream: player.playerStateStream,
           builder: (context, snapshot) {
@@ -174,12 +357,19 @@ class ControlButtons extends StatelessWidget {
               return IconButton(
                 icon: const Icon(Icons.replay),
                 iconSize: 64.0,
-                onPressed: () => player.seek(Duration.zero),
+                onPressed: () => player.seek(Duration.zero,
+                    index: player.effectiveIndices!.first),
               );
             }
           },
         ),
-        // Opens speed slider dialog
+        StreamBuilder<SequenceState?>(
+          stream: player.sequenceStateStream,
+          builder: (context, snapshot) => IconButton(
+            icon: const Icon(Icons.skip_next),
+            onPressed: player.hasNext ? player.seekToNext : null,
+          ),
+        ),
         StreamBuilder<double>(
           stream: player.speedStream,
           builder: (context, snapshot) => IconButton(
@@ -202,5 +392,17 @@ class ControlButtons extends StatelessWidget {
       ],
     );
   }
+}
+
+class AudioMetadata {
+  final String album;
+  final String title;
+  final String artwork;
+
+  AudioMetadata({
+    required this.album,
+    required this.title,
+    required this.artwork,
+  });
 }
 

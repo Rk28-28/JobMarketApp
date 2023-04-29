@@ -1,6 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+
+// sound player code from https://pub.dev/packages/just_audio
 
 class SeekBar extends StatefulWidget {
   final Duration duration;
@@ -42,11 +43,14 @@ class SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData.copyWith(
             thumbShape: HiddenThumbComponentShape(),
-            activeTrackColor: Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
+            activeTrackColor: Colors.green.shade100,
+            inactiveTrackColor: Colors.green,
+            thumbColor: Colors.green,
           ),
           child: ExcludeSemantics(
             child: Slider(
+              activeColor: Colors.green,
+              inactiveColor: Colors.green[200],
               min: 0.0,
               max: widget.duration.inMilliseconds.toDouble(),
               value: min(widget.bufferedPosition.inMilliseconds.toDouble(),
@@ -71,8 +75,11 @@ class SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData.copyWith(
             inactiveTrackColor: Colors.transparent,
+            thumbColor: Colors.green,
           ),
           child: Slider(
+            activeColor: Colors.green,
+            inactiveColor: Colors.green[100],
             min: 0.0,
             max: widget.duration.inMilliseconds.toDouble(),
             value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
@@ -167,6 +174,8 @@ void showSliderDialog({
                       fontWeight: FontWeight.bold,
                       fontSize: 24.0)),
               Slider(
+                activeColor: Colors.green,
+                inactiveColor: Colors.green[100],
                 divisions: divisions,
                 min: min,
                 max: max,

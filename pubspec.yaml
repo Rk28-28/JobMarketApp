@@ -40,6 +40,7 @@ dependencies:
   youtube_player_flutter: ^8.1.2
   just_audio: ^0.9.32
   searchfield: ^0.7.7
+  english_words: ^4.0.0-0
 
 
 dev_dependencies:
@@ -71,6 +72,12 @@ flutter:
   assets:
     - assets/googlelogo.png
     - assets/androidperson.png
+    - assets/256.jpg
+    - assets/fragmented.jpg
+    - assets/inner-peace-144554.mp3
+    - assets/innerpeace.jpg
+    - assets/star-dance-7999.mp3
+    - assets/starimage.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

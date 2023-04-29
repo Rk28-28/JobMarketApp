@@ -15,7 +15,6 @@ class _CitySearchPageState extends State<CitySearchPage> {
   var CityPicked;
 
 
-
   List<String> Cities = [
     'Akron, OH',
     'Albany, NY',
@@ -99,11 +98,9 @@ class _CitySearchPageState extends State<CitySearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Search for Jobs Based on City'),
-        ),
-        body: Column(
-          children:[
+      body: Container(
+        child: Column(
+          children: [
             DropdownButton(
                 hint: Text("Select A City"),
                 value: CityPicked,
@@ -120,86 +117,134 @@ class _CitySearchPageState extends State<CitySearchPage> {
                   });
                 }),
 
-          FutureBuilder(
-            builder: (ctx, snapshot) {
-              // Checking if future is resolved or not
-              if (snapshot.connectionState == ConnectionState.done) {
-                // If we got an error
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      '${snapshot.error} occurred',
-                      style: TextStyle(fontSize: 19),
-                    ),
-                  );
+            FutureBuilder(
+              builder: (ctx, snapshot) {
+                // Checking if future is resolved or not
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // If we got an error
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: TextStyle(fontSize: 19),
+                      ),
+                    );
 
-                  // if we got our data
-                } else if (snapshot.hasData) {
+                    // if we got our data
+                  } else if (snapshot.hasData) {
+                    // Extracting data from snapshot object
+                    final data = snapshot.data as String;
+                    //print("Data" + data);
 
-                  // Extracting data from snapshot object
-                  final data = snapshot.data as String;
-
-                  return Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      loop(data),
-                      style: TextStyle(fontSize: 14.4,color: Colors.white),
-
-
-                    ),
-                  );
+                    return Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        data,
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                    );
+                  }
                 }
-              }
 
-              // Displaying LoadingSpinner to indicate waiting state
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-
-            // Future that needs to be resolved
-            // inorder to display something on the Canvas
-            future: getdata(CityPicked),
-          ),
-          /*child: DropdownButton(
-              hint: Text("Select A City"),
-              value: CityPicked,
-              items: Cities.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+                // Displaying LoadingSpinner to indicate waiting state
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  CityPicked = value;
-                });
-              }),*/
-    ],
+              },
+
+              // Future that needs to be resolved
+              // inorder to display something on the Canvas
+              future: getdata(CityPicked),
+            ),
+          ],
         ),
+      ),
     );
   }
 
-  Future<String> getdata(CityPicked) async {
 
+  Future<String> getdata(cityPicked) async {
     DocumentReference<Map<String, dynamic>> diaryRef = FirebaseFirestore
         .instance
         .collection('CityData')
-        .doc(CityPicked);
+        .doc(cityPicked);
 
     String x = "";
+    int numjobs=0;
+    int adjustedsalary = 0;
+    int unadjustedsalary = 0;
     await diaryRef.get().then(
-          (querySnapshot) {
-        print("Successfully completed");
-          x += querySnapshot.data().toString();
+            (querySnapshot) {
+          print("Successfully completed");
+          if (querySnapshot.data() != null) {
+            numjobs = querySnapshot.get('numberOfSoftwareDeveloperJobs');
+            adjustedsalary =
+                querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted');
+            unadjustedsalary =
+                querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted');
+
+            x += '\n\n'+" Number Of Software Developer Jobs: " +
+                querySnapshot.get('numberOfSoftwareDeveloperJobs').toString() +
+                '\n\n';
+            x += " Adjusted Mean Salary: \$" +
+                querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted')
+                    .toString() + '\n\n';
+            x += " Unadjusted Mean Salary: \$" +
+                querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted')
+                    .toString() + '\n\n\n\n\n\n\n\n';
+          }
+          else {
+            x = "";
+          }
+
+
+          // x += querySnapshot.data().toString();
+          //print(x);
         }
     );
-    return x;
-  }
+    int countnumjobs = 1;
+    int countadjustedsalary = 1;
+    int countunadjustedsalary = 1;
+    for (int i = 0; i < Cities.length;++i)
+    {
+      DocumentReference<Map<String, dynamic>> ref = FirebaseFirestore
+          .instance
+          .collection('CityData')
+          .doc(Cities[i]);
 
-  String loop(String data) {
-    String s = data.toString();
-    return s;
+      await ref.get().then(
+              (querySnapshot) {
+            print("Successfully completed");
+              //Has more jobs than countnumjobs cities
+              if((querySnapshot.get('numberOfSoftwareDeveloperJobs')) >= numjobs)
+                {
+                  ++countnumjobs;
+                }
+              if((querySnapshot.get('meanSoftwareDeveloperSalaryAdjusted')) >= adjustedsalary)
+                {
+                ++countadjustedsalary;
+                }
+              if((querySnapshot.get('meanSoftwareDeveloperSalaryUnadjusted')) >= unadjustedsalary)
+                {
+               ++countunadjustedsalary;
+                }
+
+            }
+            );
+
+    }
+  if(x != "")
+  {
+    x += " Software Developer Job Count Ranking: " +
+        countnumjobs.toString() + ' of 77 \n\n';
+    x += " Adjusted Mean Salary Ranking: " + countadjustedsalary.toString() +
+        ' of 77 \n\n';
+    x +=
+        " Unadjusted Mean Salary Ranking: " + countunadjustedsalary.toString() +
+            ' of 77 \n\n';
+  }
+    //print("Outside of Loop"+ x);
+    return x;
   }
 }
 

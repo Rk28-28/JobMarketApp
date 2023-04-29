@@ -12,13 +12,14 @@ class _VideoListState extends State<VideoList> {
     'qpkegRmPgis',
     'L19XilAtO0',
     '84Ja3XadHTk',
-    'J30wmYgzVXM'
+    'J30wmYgzVXM',
+    'ppf9j8x0LA8'
   ]
       .map<YoutubePlayerController>(
         (videoId) => YoutubePlayerController(
       initialVideoId: videoId,
       flags: const YoutubePlayerFlags(
-        autoPlay: false,
+        autoPlay: true,
       ),
     ),
   )

@@ -29,9 +29,9 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
 
   final List<String> _ids = [
     'qpkegRmPgis',
-    'L19XilAtO0',
     '84Ja3XadHTk',
-    'J30wmYgzVXM'
+    'J30wmYgzVXM',
+    'ppf9j8x0LA8'
   ];
   @override
   void initState() {
@@ -80,6 +80,21 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<YoutubePlayerController> _controllers = [
+      'qpkegRmPgis',
+      '84Ja3XadHTk',
+      'J30wmYgzVXM',
+      'ppf9j8x0LA8'
+    ]
+        .map<YoutubePlayerController>(
+          (videoId) => YoutubePlayerController(
+        initialVideoId: videoId,
+        flags: const YoutubePlayerFlags(
+          autoPlay: true,
+        ),
+      ),
+    )
+        .toList();
     /*
     return Scaffold(
       appBar: AppBar(
@@ -95,7 +110,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
       player: YoutubePlayer(
         controller: _controller,
         showVideoProgressIndicator: true,
-        progressIndicatorColor: Colors.blueAccent,
+        progressIndicatorColor: Colors.green,
         topActions: <Widget>[
           const SizedBox(width: 8.0),
           Expanded(
@@ -130,31 +145,8 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
         },
       ),
       builder: (context, player) => Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 12.0),
-            child: Image.asset(
-              'assets/ypf.png',
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-          title: const Text(
-            'Youtube Videos',
-            style: TextStyle(color: Colors.white),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.video_library),
-              onPressed: () => Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => VideoList(),
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: ListView(
+        body:
+        SafeArea( child: ListView(
           children: [
             player,
             Padding(
@@ -163,12 +155,24 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _space,
-                  _text('Title', _videoMetaData.title),
+                  Container(
+                    alignment: Alignment.center,
+                  child: Text(
+                    _videoMetaData.title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                  ),
+                  ),
                   _space,
+                  /*
                   _text('Channel', _videoMetaData.author),
                   _space,
                   _text('Video Id', _videoMetaData.videoId),
                   _space,
+
+
                   Row(
                     children: [
                       _text(
@@ -183,6 +187,8 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                     ],
                   ),
                   _space,
+
+
                   TextField(
                     enabled: _isPlayerReady,
                     controller: _idController,
@@ -201,6 +207,8 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                       ),
                     ),
                   ),
+
+
                   _space,
                   Row(
                     children: [
@@ -210,6 +218,8 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                     ],
                   ),
                   _space,
+
+                   */
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -252,7 +262,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                       ),
                       FullScreenButton(
                         controller: _controller,
-                        color: Colors.blueAccent,
+                        color: Colors.orangeAccent,
                       ),
                       IconButton(
                         icon: const Icon(Icons.skip_next),
@@ -270,7 +280,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                     children: <Widget>[
                       const Text(
                         "Volume",
-                        style: TextStyle(fontWeight: FontWeight.w300),
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Expanded(
                         child: Slider(
@@ -279,6 +289,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                           min: 0.0,
                           max: 100.0,
                           divisions: 10,
+                          activeColor: Colors.green,
                           label: '${(_volume).round()}',
                           onChanged: _isPlayerReady
                               ? (value) {
@@ -293,6 +304,32 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                     ],
                   ),
                   _space,
+                  SizedBox(
+                    height: 350.0,
+                  child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return YoutubePlayer(
+                        key: ObjectKey(_controllers[index]),
+                        controller: _controllers[index],
+
+                        actionsPadding: const EdgeInsets.only(left: 16.0),
+                        bottomActions: [
+                          CurrentPosition(),
+                          const SizedBox(width: 10.0),
+                          ProgressBar(isExpanded: true),
+                          const SizedBox(width: 10.0),
+                          RemainingDuration(),
+                          FullScreenButton(),
+                        ],
+
+
+                      );
+                    },
+                    itemCount: _controllers.length,
+                    separatorBuilder: (context, _) => const SizedBox(height: 10.0),
+                  ),
+                  ),
+                  /*
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 800),
                     decoration: BoxDecoration(
@@ -309,10 +346,14 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                       textAlign: TextAlign.center,
                     ),
                   ),
+
+                   */
+
                 ],
               ),
             ),
           ],
+        ),
         ),
       ),
     );

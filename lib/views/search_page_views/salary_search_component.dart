@@ -13,9 +13,6 @@ class _SalarySearchPageState extends State<SalarySearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Search for Jobs Based on Salary'),
-      ),
     );
   }
 }

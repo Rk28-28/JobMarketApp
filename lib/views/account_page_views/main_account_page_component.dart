@@ -20,84 +20,96 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.brown[100],
       appBar: AppBar(
         title: Text('Account Page'),
       ),
       bottomNavigationBar: CustomBottomAppBar(
         selectedIndex: _selectedIndex,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 60.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Hello, ${getUserName()}",
-                style: const TextStyle(fontSize: 30),
+      body: Container(
+        color: Colors.brown[100],
+        child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
+              decoration: BoxDecoration(
+                color: Colors.green[400],
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 100.0),
-                child: Container(
-                  width: 300,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator to Extra Info screen
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (BuildContext context) {
-                        return JobJournalScreen();
-                      }));
-                    },
-                    child: Text('My Job Search Journal'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                   CircleAvatar(
+                    radius: 50.0,
+                    backgroundColor: Colors.brown[50],
+                    child: Icon(
+                      Icons.person,
+                      size: 60.0,
+                      color: Colors.brown[100],
+                    ),
                   ),
-                ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    getUserName(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                width: 300,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator to Extra Info screen
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (BuildContext context) {
-                      return CareerGoalsScreen();
-                    }));
-                  },
-                  child: Text('My Career Goals'),
-                ),
+            ),
+            SizedBox(height: 50.0),
+            buildOptionButton(
+              context,
+              'My Interview Journal',
+              Icon(Icons.book, color:Colors.black),
+              JobJournalScreen(),
+            ),
+            SizedBox(height: 20.0),
+            buildOptionButton(
+              context,
+              'My Career Goals',
+              Icon(Icons.school, color:Colors.black),
+              CareerGoalsScreen(),
+            ),
+            SizedBox(height: 20.0),
+            buildOptionButton(
+              context,
+              'Set/View Interviews',
+              Icon(Icons.calendar_today, color:Colors.black),
+              InterviewScreen(),
+            ),
+            SizedBox(height: 50.0),
+           ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.orange[200]),
+                minimumSize: MaterialStateProperty.all(Size(100, 40)),
               ),
-              Container(
-                width: 300,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator to Extra Info screen
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (BuildContext context) {
-                      return InterviewScreen();
-                    }));
-                  },
-                  child: Text('Set/View Interviews'),
-                ),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                      (_) => false,
+                );
+              },
+              child: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.black, fontSize: 16),
               ),
-              Container(
-                width: 300,
-                child: ElevatedButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      /* This is used to navigate back to the login screen when signed out,
-                    otherwise it will stay frozen on the accounts page, don't ask me why
-                    this works
-                    */
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyApp()),
-                          (_) => false);
-                    },
-                    child: Text('Logout')),
-              )
-            ],
-          ),
+            ),
+            SizedBox(height: 50.0),
+          ],
         ),
+      ),
       ),
     );
   }
@@ -109,6 +121,28 @@ class _AccountPageState extends State<AccountPage> {
       return FirebaseAuth.instance.currentUser!.displayName!;
     }
   }
+  Widget buildOptionButton(
+      BuildContext context,
+      String text,
+      Icon icon,
+      Widget screen,
+      ) {
+    return ElevatedButton.icon(
+        style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.brown[50]),
+          minimumSize: MaterialStateProperty.all(Size(100, 50)),
+
+        ),
+    onPressed: () {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+    },
+    icon: icon,
+    label: Text(
+    text,
+    style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
+    )
+    );
+}
 }
 
 class JobJournalScreen extends StatefulWidget {
