@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
+        backgroundColor: Colors.brown[100],
       ),
       backgroundColor: Colors.brown[50], // Set background color to tan
       bottomNavigationBar: CustomBottomAppBar(

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:groupb_final/main.dart';
-import '../../login_page.dart';
 import '../../custom_app_bar.dart';
 import 'career_goal_page_component.dart';
 import 'job_journal_page_component.dart';
@@ -23,7 +22,7 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
-        title: Text('Your Account'),
+        title: const Text('Your Account'),
         backgroundColor: Colors.green[400],
       ),
       bottomNavigationBar: CustomBottomAppBar(
@@ -103,7 +102,7 @@ class _AccountPageState extends State<AccountPage> {
                       (_) => false,
                 );
               },
-              child: Text(
+              child: const Text(
                 'Logout',
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
@@ -141,7 +140,7 @@ class _AccountPageState extends State<AccountPage> {
     icon: icon,
     label: Text(
     text,
-    style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
+    style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
     )
     );
 }

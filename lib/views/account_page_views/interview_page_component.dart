@@ -22,7 +22,9 @@ class _InterviewPageState extends State<InterviewPage> {
 @override
 Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.brown[100],
         appBar: AppBar(
+          backgroundColor: Colors.green[400],
         title: Text('Set/View Interviews'),
         ),
 
@@ -38,17 +40,17 @@ Widget build(BuildContext context) {
               const Padding( //Text that displays "Enter a Date"
                 padding: EdgeInsets.fromLTRB(8,16,8,8),
                 child: Text(("Schedule a New Interview:"),
-                    style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center),
+                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
               ),
 
               Container( //Text box for typing in a date
 
                   child: TextField(
                       controller: sendDateController, //editing controller of this TextField
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
                         filled: true,
-                        fillColor: Colors.white70,
+                        fillColor: Colors.brown[50],
                         hintText: "Enter date",
                       ),
 
@@ -75,10 +77,10 @@ Widget build(BuildContext context) {
               Container(
                 child: TextField(
                     controller: sendTimeController, //editing controller of this TextField
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.access_time), //icon of text field
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.access_time), //icon of text field
                       filled: true,
-                      fillColor: Colors.white70,
+                      fillColor: Colors.brown[50],
                       hintText: "Enter time",
                     ),
 
@@ -101,14 +103,21 @@ Widget build(BuildContext context) {
 
 
               ),
-
+              SizedBox(height: 10),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green[300]),
+                  minimumSize: MaterialStateProperty.all(Size(100, 45)), // specify the minimum width and height here
+                ),
                 onPressed: () { // Send Date to Database
                   sendToDatabase(sendDateController.text.toString(), sendTimeController.text.toString());
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Processing Data', style: TextStyle(color: Colors.white))));
                 },
-                child: Text('Set Interview Date/Time'),
+                child: const Text('Set Interview Date/Time',
+                style: TextStyle(color: Colors.black),
+                ),
+
               ),
 
 
@@ -116,16 +125,16 @@ Widget build(BuildContext context) {
               const Padding( //Text that displays "Enter a Date"
                 padding: EdgeInsets.fromLTRB(8,64,8,8),
                 child: Text(("Retrieve Interview Info:"),
-                    style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center),
+                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
               ),
               Container( //Text box for typing in a date
 
                   child: TextField(
                       controller: retrieveDateController, //editing controller of this TextField
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.calendar_today), //icon of text field
+                      decoration:  InputDecoration(
+                        icon: const Icon(Icons.calendar_today), //icon of text field
                         filled: true,
-                        fillColor: Colors.white70,
+                        fillColor: Colors.brown[50],
                         hintText: "Enter date",
                       ),
 
@@ -150,10 +159,10 @@ Widget build(BuildContext context) {
               Container(
                 child: TextField(
                     controller: retrieveTimeController, //editing controller of this TextField
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.access_time), //icon of text field
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.access_time), //icon of text field
                       filled: true,
-                      fillColor: Colors.white70,
+                      fillColor: Colors.brown[50],
                       hintText: "Enter time",
                     ),
 
@@ -176,7 +185,12 @@ Widget build(BuildContext context) {
 
 
               ),
+              SizedBox(height: 10),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green[300]),
+                  minimumSize: MaterialStateProperty.all(Size(100, 45)), // specify the minimum width and height here
+                ),
                 onPressed: () { // Send Date to Database
                   FutureBuilder(
                     builder: (ctx, snapshot) {
@@ -220,7 +234,8 @@ Widget build(BuildContext context) {
 
 
                 },
-                child: Text('Retrieve Interview Info'),
+                child: const Text('Retrieve Interview Info',
+                style: TextStyle(color: Colors.black),),
               ),
             ],
           ),
