@@ -28,58 +28,73 @@ class _AccountPageState extends State<AccountPage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(top: 60.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                getUserName()
+                "Hello, ${getUserName()}",
+                style: const TextStyle(fontSize: 30),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigator to Extra Info screen
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return JobJournalScreen();
-                  }));
-                },
-                child: Text('My Job Search Journal'),
+              Padding(
+                padding: const EdgeInsets.only(top: 100.0),
+                child: Container(
+                  width: 300,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navigator to Extra Info screen
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (BuildContext context) {
+                        return JobJournalScreen();
+                      }));
+                    },
+                    child: Text('My Job Search Journal'),
+                  ),
+                ),
               ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigator to Extra Info screen
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return CareerGoalsScreen();
-                  }));
-                },
-                child: Text('My Career Goals'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigator to Extra Info screen
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return InterviewScreen();
-                  }));
-                },
-                child: Text('Set/View Interviews'),
-              ),
-              ElevatedButton(
+              Container(
+                width: 300,
+                child: ElevatedButton(
                   onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                    /* This is used to navigate back to the login screen when signed out,
-                  otherwise it will stay frozen on the accounts page, don't ask me why
-                  this works
-                  */
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                        (_) => false);
+                    // Navigator to Extra Info screen
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (BuildContext context) {
+                      return CareerGoalsScreen();
+                    }));
                   },
-                  child: Text('Logout'))
+                  child: Text('My Career Goals'),
+                ),
+              ),
+              Container(
+                width: 300,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigator to Extra Info screen
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (BuildContext context) {
+                      return InterviewScreen();
+                    }));
+                  },
+                  child: Text('Set/View Interviews'),
+                ),
+              ),
+              Container(
+                width: 300,
+                child: ElevatedButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      /* This is used to navigate back to the login screen when signed out,
+                    otherwise it will stay frozen on the accounts page, don't ask me why
+                    this works
+                    */
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                          (_) => false);
+                    },
+                    child: Text('Logout')),
+              )
             ],
           ),
         ),
