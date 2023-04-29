@@ -23,6 +23,7 @@ class _AccountPageState extends State<AccountPage> {
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         title: const Text('Your Account'),
+        centerTitle: true,
         backgroundColor: Colors.green[400],
       ),
       bottomNavigationBar: CustomBottomAppBar(
