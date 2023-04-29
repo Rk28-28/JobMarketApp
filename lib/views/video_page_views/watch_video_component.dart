@@ -131,13 +131,6 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
       ),
       builder: (context, player) => Scaffold(
         appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 12.0),
-            child: Image.asset(
-              'assets/ypf.png',
-              fit: BoxFit.fitWidth,
-            ),
-          ),
           title: const Text(
             'Youtube Videos',
             style: TextStyle(color: Colors.white),
