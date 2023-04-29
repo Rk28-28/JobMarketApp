@@ -91,7 +91,7 @@ class _AccountPageState extends State<AccountPage> {
             SizedBox(height: 50.0),
            ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.green[400]),
+                backgroundColor: MaterialStateProperty.all(Colors.indigo[200]),
                 minimumSize: MaterialStateProperty.all(Size(100, 40)),
               ),
               onPressed: () {

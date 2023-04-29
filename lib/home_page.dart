@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 16, top: 16),
+              padding: const EdgeInsets.only(left: 16, top: 16),
               child: RichText(
                 text: const TextSpan(
                   text: 'Hi Future ',
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () => _showSkillDescription(context, title, description),
       child: Card(
-        color: Colors.green[100],
+        color: Colors.indigo[200],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
