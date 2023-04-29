@@ -145,23 +145,6 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
         },
       ),
       builder: (context, player) => Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Youtube Videos',
-            style: TextStyle(color: Colors.white),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.video_library),
-              onPressed: () => Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => VideoList(),
-                ),
-              ),
-            ),
-          ],
-        ),
         body:
         SafeArea( child: ListView(
           children: [
@@ -328,7 +311,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                       return YoutubePlayer(
                         key: ObjectKey(_controllers[index]),
                         controller: _controllers[index],
-                        /*
+
                         actionsPadding: const EdgeInsets.only(left: 16.0),
                         bottomActions: [
                           CurrentPosition(),
@@ -339,7 +322,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                           FullScreenButton(),
                         ],
 
-                         */
+
                       );
                     },
                     itemCount: _controllers.length,
@@ -365,6 +348,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                   ),
 
                    */
+
                 ],
               ),
             ),
