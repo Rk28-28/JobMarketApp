@@ -26,7 +26,7 @@ class _MoneyPageState extends State<MoneyPage> {
                     indicatorColor: Colors.green,
                     tabs: [
                       Tab(icon: Icon(Icons.location_city)),
-                      Tab(icon: Icon(Icons.monetization_on)),
+                      Tab(icon: Icon(Icons.work)),
                     ],
                   ),
                   title: Text('Compare'),
