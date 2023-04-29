@@ -15,6 +15,7 @@ class _CompareCityPageState extends State<CompareCityPage> {
   final _formKey = GlobalKey<FormState>();
   final _focus = FocusNode();
   final _searchController = TextEditingController();
+  bool _show = false;
   City _dataCity = City("", 0, 0, 0, 0, 0);
 
   @override
@@ -42,24 +43,31 @@ class _CompareCityPageState extends State<CompareCityPage> {
                   builder: (context, future) {
                     return Column(
                       children: [
-                        Text(
-                         "Name: ${_dataCity.name}"
+                        Visibility(
+                          visible: _show,
+                          child: Column(
+                            children: [
+                              Text(
+                                  "Name: ${_dataCity.name}"
+                              ),
+                              Text(
+                                  "Cost of living: ${_dataCity.costOfLivingAvg}"
+                              ),
+                              Text(
+                                  "Cost of living with rent: ${_dataCity.costOfLivingPlusRentAverage}"
+                              ),
+                              Text(
+                                  "Local purchasing power: ${_dataCity.localPurchasingPowerAverage}"
+                              ),
+                              Text(
+                                  "Median home price: ${_dataCity.medianHomePrice}"
+                              ),
+                              Text(
+                                  "Average rent: ${_dataCity.rentAvg}"
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(
-                          "Cost of living: ${_dataCity.costOfLivingAvg}"
-                        ),
-                        Text(
-                            "Cost of living with rent: ${_dataCity.costOfLivingPlusRentAverage}"
-                        ),
-                        Text(
-                            "Local purchasing power: ${_dataCity.localPurchasingPowerAverage}"
-                        ),
-                        Text(
-                            "Median home price: ${_dataCity.medianHomePrice}"
-                        ),
-                        Text(
-                            "Average rent: ${_dataCity.rentAvg}"
-                        )
                       ],
                     );
                   })
@@ -74,7 +82,7 @@ class _CompareCityPageState extends State<CompareCityPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 40, right: 30, left: 30),
+          padding: const EdgeInsets.only(top: 40, right: 30, left: 30, bottom: 200),
           child: Form(
             key: _formKey,
             child: SearchField(
@@ -92,11 +100,9 @@ class _CompareCityPageState extends State<CompareCityPage> {
               itemHeight: 50,
               onSuggestionTap: (value) {
                 setState(() {
-                  _selectedCity = value.item;
+                  _selectedCity = _searchController.text;
                 });
-                _selectedCity = _searchController.text;
-                print(_selectedCity);
-                getCityInformation();
+                _show = true;
                 _formKey.currentState?.validate();
                 _focus.unfocus();
               },
@@ -122,11 +128,11 @@ class _CompareCityPageState extends State<CompareCityPage> {
 
 class City {
   final String name;
-  final double costOfLivingAvg;
-  final double costOfLivingPlusRentAverage;
-  final double localPurchasingPowerAverage;
-  final int medianHomePrice;
-  final double rentAvg;
+  final dynamic costOfLivingAvg;
+  final dynamic costOfLivingPlusRentAverage;
+  final dynamic localPurchasingPowerAverage;
+  final dynamic medianHomePrice;
+  final dynamic rentAvg;
   
   City(this.name, this.costOfLivingAvg, this.costOfLivingPlusRentAverage, 
       this.localPurchasingPowerAverage, this.medianHomePrice, this.rentAvg);
