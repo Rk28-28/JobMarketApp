@@ -1,3 +1,4 @@
+
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,40 +28,40 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
         start: const Duration(seconds: 60),
         end: const Duration(seconds: 90),
         child: AudioSource.uri(Uri.parse(
-            "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")),
+            "https://cdn.transistor.fm/file/transistor/m/shows/36009/28b7b1495bb29b51ccda39d74cb38a66.mp3")),
         tag: AudioMetadata(
-          album: "Science Friday",
-          title: "A Salute To Head-Scratching Science (30 seconds)",
+          album: "Developer Purpose Podcast",
+          title: "One daily habit that changed my developer career",
           artwork:
-          "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+          "assets/256.jpg",
         ),
       ),
     AudioSource.uri(
       Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
+          "https://cdn.simplecast.com/audio/20f35050-e836-44cd-8f7f-fd13e8cb2e44/episodes/1a86efc0-ed64-49e2-904f-026f83321c1e/audio/e4db4d61-e751-4305-bf6a-6ac9f3a30b53/default_tc.mp3?aid=rss_feed&feed=LpAGSLnY"),
       tag: AudioMetadata(
-        album: "Science Friday",
-        title: "A Salute To Head-Scratching Science",
+        album: "Fragmented - The Software Podcast",
+        title: "How to Land a Job",
         artwork:
-        "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+        "assets/fragmented.jpg",
       ),
     ),
     AudioSource.uri(
-      Uri.parse("https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3"),
+    Uri.parse('assets/star-dance-7999.mp3'),
       tag: AudioMetadata(
-        album: "Science Friday",
-        title: "From Cat Rheology To Operatic Incompetence",
+        album: "Star Dance",
+        title: "Relaxing Music",
         artwork:
-        "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+        "assets/starimage.jpg",
       ),
     ),
     AudioSource.uri(
-      Uri.parse("asset:///audio/nature.mp3"),
+      Uri.parse("assets/inner-peace-144554.mp3"),
       tag: AudioMetadata(
-        album: "Public Domain",
-        title: "Nature Sounds",
+        album: "Inner Peace",
+        title: "Peaceful Music",
         artwork:
-        "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+        "assets/innerpeace.jpg",
       ),
     ),
   ]);
@@ -151,9 +152,11 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: _scaffoldMessengerKey,
       home: Scaffold(
+        backgroundColor: Colors.brown[100],
         appBar: AppBar(
+          backgroundColor: Colors.orange[200],
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back,),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -181,7 +184,7 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child:
-                            Center(child: Image.network(metadata.artwork)),
+                            Center(child: Image.asset(metadata.artwork)),
                           ),
                         ),
                         Text(metadata.album,
@@ -216,7 +219,7 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
                     builder: (context, snapshot) {
                       final loopMode = snapshot.data ?? LoopMode.off;
                       const icons = [
-                        Icon(Icons.repeat, color: Colors.grey),
+                        Icon(Icons.repeat, color: Colors.black),
                         Icon(Icons.repeat, color: Colors.orange),
                         Icon(Icons.repeat_one, color: Colors.orange),
                       ];
@@ -250,7 +253,7 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
                       return IconButton(
                         icon: shuffleModeEnabled
                             ? const Icon(Icons.shuffle, color: Colors.orange)
-                            : const Icon(Icons.shuffle, color: Colors.grey),
+                            : const Icon(Icons.shuffle, color: Colors.black),
                         onPressed: () async {
                           final enable = !shuffleModeEnabled;
                           if (enable) {
@@ -277,31 +280,18 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
                       },
                       children: [
                         for (var i = 0; i < sequence.length; i++)
-                          Dismissible(
-                            key: ValueKey(sequence[i]),
-                            background: Container(
-                              color: Colors.redAccent,
-                              alignment: Alignment.centerRight,
-                              child: const Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(Icons.delete, color: Colors.white),
-                              ),
-                            ),
-                            onDismissed: (dismissDirection) {
-                              _playlist.removeAt(i);
-                            },
-                            child: Material(
-                              color: i == state!.currentIndex
-                                  ? Colors.grey.shade300
-                                  : null,
-                              child: ListTile(
+                           ListTile(
+                             key: ValueKey(sequence[i]),
                                 title: Text(sequence[i].tag.title as String),
                                 onTap: () {
                                   _player.seek(Duration.zero, index: i);
                                 },
-                              ),
-                            ),
-                          ),
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.brown)),
+                             tileColor: Colors.brown[50] ,
+                             selectedTileColor: Colors.green,
+
+                           ),
                       ],
                     );
                   },

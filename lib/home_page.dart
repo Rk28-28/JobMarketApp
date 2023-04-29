@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () => _showSkillDescription(context, title, description),
       child: Card(
-        color: Colors.indigo[200],
+        color: Colors.orange[200],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
