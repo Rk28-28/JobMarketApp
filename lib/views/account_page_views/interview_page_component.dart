@@ -16,6 +16,7 @@ TextEditingController sendDateController = new TextEditingController();
 TextEditingController retrieveDateController = new TextEditingController();
 TextEditingController sendTimeController = new TextEditingController();
 TextEditingController retrieveTimeController = new TextEditingController();
+TextEditingController dataController = new TextEditingController();
 class _InterviewPageState extends State<InterviewPage> {
 
 @override
@@ -175,9 +176,49 @@ Widget build(BuildContext context) {
 
 
               ),
-
               ElevatedButton(
                 onPressed: () { // Send Date to Database
+                  FutureBuilder(
+                    builder: (ctx, snapshot) {
+                      // Checking if future is resolved or not
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(fontSize: 19),
+                            ),
+                          );
+
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final data = snapshot.data as String;
+                          print("Data :"+data);
+                          //String x = loop(getdata());
+                          return Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              data,
+                              style: TextStyle(fontSize: 14.4,color: Colors.black),
+                            ),
+                          );
+                        }
+                      }
+
+                      // Displaying LoadingSpinner to indicate waiting state
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+
+                    // Future that needs to be resolved
+                    // inorder to display something on the Canvas
+                    future: retrieveData(retrieveDateController.text.toString(), retrieveTimeController.text.toString()),
+                  );
+
+
                 },
                 child: Text('Retrieve Interview Info'),
               ),
@@ -185,8 +226,6 @@ Widget build(BuildContext context) {
           ),
         ),
       ),
-
-
       );
     }
   }
@@ -203,4 +242,29 @@ Future<void> sendToDatabase(String dateStr, String timeStr) async {
     'Date of Interview': dateStr,
     'Time of Interview': timeStr,
   });
+}
+
+Future<String> retrieveData(String dateStr, String timeStr) async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+  final uid = user?.uid;
+String str = "";
+
+  DocumentReference<Map<String, dynamic>> interviewJournalRef = FirebaseFirestore.instance.collection('users')
+      .doc(auth.currentUser?.uid).collection(dateStr).doc(timeStr);
+
+  await interviewJournalRef.get().then(
+          (querySnapshot) {
+        print("Successfully completed");
+        if (querySnapshot.data() != null) {
+          str += querySnapshot.data().toString();
+        }
+        else {
+          str  = "";
+        }
+      }
+  );
+  print(str);
+  //print(str);
+  return str;
 }
