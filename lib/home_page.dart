@@ -16,6 +16,34 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.info,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Source"),
+                    content: Text("All data presented within this application is credited to "
+                        "the database titled \"Sofware Developer income/expenses per USA City\" "
+                        "by Bruno Bonfrisco and Franco Seveso. From "
+                        "\"https://zenodo.org/record/7412091#.ZE2brnbMK3C\"."),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('OK', style: TextStyle(color: Colors.green),),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          )
+        ],
         title: const Text('Home'),
         centerTitle: true,
         backgroundColor: Colors.brown[100],

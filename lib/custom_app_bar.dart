@@ -26,35 +26,35 @@ class CustomBottomAppBar extends StatelessWidget {
             onPressed: () => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => VideoPage()),
             ),
-            color: selectedIndex == 0 ? Colors.blue : Colors.grey,
+            color: selectedIndex == 0 ? Colors.green : Colors.grey,
           ),
           IconButton(
             icon: Icon(Icons.attach_money),
             onPressed: () => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => MoneyPage()),
             ),
-            color: selectedIndex == 1 ? Colors.blue : Colors.grey,
+            color: selectedIndex == 1 ? Colors.green : Colors.grey,
           ),
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => HomePage()),
             ),
-            color: selectedIndex == 2 ? Colors.blue : Colors.grey,
+            color: selectedIndex == 2 ? Colors.green : Colors.grey,
           ),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => SearchPage()),
             ),
-            color: selectedIndex == 3 ? Colors.blue : Colors.grey,
+            color: selectedIndex == 3 ? Colors.green : Colors.grey,
           ),
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => AccountPage()),
             ),
-            color: selectedIndex == 4 ? Colors.blue : Colors.grey,
+            color: selectedIndex == 4 ? Colors.green : Colors.grey,
           ),
         ],
       ),

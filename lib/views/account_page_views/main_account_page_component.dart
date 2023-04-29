@@ -22,7 +22,9 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
-        title: Text('Account Page'),
+        centerTitle: true,
+        backgroundColor: Colors.green[400],
+        title: Text('Your Account'),
       ),
       bottomNavigationBar: CustomBottomAppBar(
         selectedIndex: _selectedIndex,

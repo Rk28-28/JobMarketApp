@@ -29,7 +29,7 @@ class _MoneyPageState extends State<MoneyPage> {
                       Tab(icon: Icon(Icons.work)),
                     ],
                   ),
-                  title: Text('Compare'),
+                  title: Text('Finances'),
                   centerTitle: true,
                 ),
                 bottomNavigationBar: CustomBottomAppBar(
