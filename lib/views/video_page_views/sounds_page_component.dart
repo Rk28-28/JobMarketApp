@@ -153,16 +153,6 @@ class _SoundsPageState extends State<SoundsPage> with WidgetsBindingObserver {
       scaffoldMessengerKey: _scaffoldMessengerKey,
       home: Scaffold(
         backgroundColor: Colors.brown[100],
-        appBar: AppBar(
-          backgroundColor: Colors.orange[200],
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back,),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text('Music & More'),
-        ),
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

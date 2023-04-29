@@ -16,44 +16,61 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Video Page'),
-      ),
-      bottomNavigationBar: CustomBottomAppBar(
-        selectedIndex: _selectedIndex,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ElevatedButton(
-                onPressed: () { // Navigator to Extra Info screen
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                    return WatchVideosScreen();
-                  }));
-                },
-                child: Text('Watch Videos'),
+    return MaterialApp(
+        home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.orange[200],
+            bottom: const TabBar(
+              indicatorColor: Colors.green,
+              tabs: [
+                Tab(icon: Icon(Icons.library_music)),
+                Tab(icon: Icon(Icons.subscriptions)),
+                ],
               ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () { // Navigator to Extra Info screen
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                    return SoundsScreen();
-                  }));
-                },
-                child: Text('Music & More'),
+              title: const Text('Media'),
               ),
+            bottomNavigationBar: CustomBottomAppBar(
+            selectedIndex: _selectedIndex,
+             ),
+    body: TabBarView(
+      children: [
+        SoundsScreen(),
+        WatchVideosScreen()
+      ],
+    ),
+    /*body: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton(
+              onPressed: () { // Navigator to Extra Info screen
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+                  return WatchVideosScreen();
+                }));
+              },
+              child: Text('Watch Videos'),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () { // Navigator to Extra Info screen
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+                  return SoundsScreen();
+                }));
+              },
+              child: Text('Music & More'),
+            ),
 
-              // TODO: Add logout button here?
-
-            ],
-          ),
+          ],
         ),
       ),
+    ),*/
+    ),
+        ),
     );
   }
 }
