@@ -34,9 +34,6 @@ class _CompareCityPageState extends State<CompareCityPage> {
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          appBar: AppBar(
-            title: Text("Search Cities"),
-          ),
           body: Column(
             children: [
               _searchBar(context),
