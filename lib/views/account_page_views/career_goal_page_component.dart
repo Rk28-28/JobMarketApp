@@ -163,6 +163,11 @@ class _CareerGoalPageState extends State<CareerGoalPage> {
                         onPressed: () {
                           sendToDatabase(_termValue, goal.text.toString(),
                               _progressionValue);
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content:
+                              Text('Processing Data', style: TextStyle(color: Colors.white))));
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text('Done!', style: TextStyle(color: Colors.white))));
                         },
                         child: const Text('Submit'),
                       ),
@@ -363,6 +368,47 @@ class _GoalCompleteState extends State<GoalComplete> {
                           },
                         ),
                       ),
+                      Column(//Second inner column
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(16, 32, 16, 16),
+                              child: Text('Complete or In-Progress?',
+                                  style: TextStyle(fontSize: 18.0, color: Colors.black)),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Radio<int>(
+                                  activeColor: Colors.black,
+                                  fillColor: MaterialStateColor.resolveWith(
+                                          (states) => Colors.black),
+                                  value: 0,
+                                  groupValue: _progressionValue,
+                                  onChanged: (newValue) =>
+                                      setState(() => _progressionValue = newValue!),
+                                ),
+                                const Text(
+                                  'Complete!',
+                                  style: TextStyle(
+                                      fontSize: 18.0, fontWeight: FontWeight.bold),
+                                ),
+                                Radio<int>(
+                                  activeColor: Colors.black,
+                                  fillColor: MaterialStateColor.resolveWith(
+                                          (states) => Colors.black),
+                                  value: 1,
+                                  groupValue: _progressionValue,
+                                  onChanged: (newValue) =>
+                                      setState(() => _progressionValue = newValue!),
+                                ),
+                                const Text(
+                                  'In-Progress!',
+                                  style: TextStyle(
+                                      fontSize: 18.0, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                          ]),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
                         child: ElevatedButton(
@@ -420,49 +466,8 @@ class _GoalCompleteState extends State<GoalComplete> {
 
               // Future that needs to be resolved
               // inorder to display something on the Canvas
-              future: getdata(goalViewer.text.toString()),
+              future: getdata(_progressionValue, goalViewer.text.toString()),
             ),
-            Column(//Second inner column
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 32, 16, 16),
-                    child: Text('Complete or In-Progress?',
-                        style: TextStyle(fontSize: 18.0, color: Colors.black)),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Radio<int>(
-                        activeColor: Colors.black,
-                        fillColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.black),
-                        value: 0,
-                        groupValue: _progressionValue,
-                        onChanged: (newValue) =>
-                            setState(() => _progressionValue = newValue!),
-                      ),
-                      const Text(
-                        'Complete!',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
-                      ),
-                      Radio<int>(
-                        activeColor: Colors.black,
-                        fillColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.black),
-                        value: 1,
-                        groupValue: _progressionValue,
-                        onChanged: (newValue) =>
-                            setState(() => _progressionValue = newValue!),
-                      ),
-                      const Text(
-                        'In-Progress!',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  )
-                ]),
           ],
         ),
       ),
@@ -470,14 +475,29 @@ class _GoalCompleteState extends State<GoalComplete> {
   }
 }
 
-Future<String> getdata(String goal) async {
+Future<String> getdata(int progressionValue, String goal) async {
+  String progression = progressionValue.toString();
+
   FirebaseAuth auth = FirebaseAuth.instance;
   String str = "\n";
-  DateTime now = DateTime.now();
-  var formatter = DateFormat('yyyy-MM-dd hh:mm');
-  String dateStr = formatter.format(now);
+  switch(progression){
+    case "0":{progression = 'Complete!';} break;
+    case "1":{progression = 'In-Progress';} break;
+    case "-1":{progression = 'no option selected;';} break;
+  }
 
-  if (dateStr.isEmpty) {
+  DocumentReference<Map<String, dynamic>> myCareerGoalsRef = FirebaseFirestore
+      .instance
+      .collection('users')
+      .doc(auth.currentUser?.uid)
+      .collection('Goals')
+      .doc(goal);
+
+  myCareerGoalsRef.update({
+    'Career Goal Term': progression,
+  });
+
+  if (goal.isEmpty) {
     str += "Please Choose a Date";
   } else {
     DocumentReference<Map<String, dynamic>> myCareerGoalsRef = FirebaseFirestore.instance
