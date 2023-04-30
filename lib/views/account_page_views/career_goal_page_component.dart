@@ -485,7 +485,7 @@ Future<String> getdata(int progressionValue, String goal) async {
     case "1":{progression = 'In-Progress';} break;
     case "-1":{progression = 'no option selected;';} break;
   }
-if(goal.isEmpty) {
+if(goal.isEmpty && progression == 'no option selected;') {
   str += " ";
   }
 else {
