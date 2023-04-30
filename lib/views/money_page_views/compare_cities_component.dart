@@ -16,7 +16,7 @@ class _CompareCityPageState extends State<CompareCityPage> {
   final _focus = FocusNode();
   final _searchController = TextEditingController();
   bool _show = false;
-  City _dataCity = City("", 0, 0, 0, 0, 0);
+  City _dataCity = City("Selected City", 0, 0, 0, 0, 0);
 
   @override
   void initState() {
@@ -35,45 +35,73 @@ class _CompareCityPageState extends State<CompareCityPage> {
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
+          backgroundColor: Colors.brown[100],
+            resizeToAvoidBottomInset: false,
           body: Column(
             children: [
               _searchBar(context),
               FutureBuilder(
                   future: getCityInformation(),
                   builder: (context, future) {
-                    return Column(
-                      children: [
-                        Visibility(
-                          visible: _show,
-                          child: Column(
-                            children: [
-                              Text(
-                                  "Name: ${_dataCity.name}"
-                              ),
-                              Text(
-                                  "Cost of living: ${_dataCity.costOfLivingAvg}"
-                              ),
-                              Text(
-                                  "Cost of living with rent: ${_dataCity.costOfLivingPlusRentAverage}"
-                              ),
-                              Text(
-                                  "Local purchasing power: ${_dataCity.localPurchasingPowerAverage}"
-                              ),
-                              Text(
-                                  "Median home price: ${_dataCity.medianHomePrice}"
-                              ),
-                              Text(
-                                  "Average rent: ${_dataCity.rentAvg}"
-                              ),
-                            ],
-                          ),
+                    return Expanded(
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.2,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        children: [
+                      Card(
+                      color: Colors.green[600],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("${_dataCity.name}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 24,
+                                    fontWeight: FontWeight.bold)),
+                          ],
                         ),
-                      ],
+                      ),
+                          _gridCard("Cost of Living", "${_dataCity.costOfLivingAvg}"),
+                          _gridCard("Cost of Living with Rent", "${_dataCity
+                              .costOfLivingPlusRentAverage}"),
+                          _gridCard("Local Purchasing Power", "${_dataCity
+                              .localPurchasingPowerAverage}"),
+                          _gridCard("Median Home Price", "${_dataCity.medianHomePrice}"),
+                          _gridCard("Average Rent", "${_dataCity.rentAvg}"),
+                        ],
+                      ),
                     );
-                  })
-            ],
-          ),
-        ));
+                  }
+              )
+                      ],
+                    )
+                    )
+                    );
+                  }
+
+  Widget _gridCard(String title, String data){
+    return Card(
+      color: Colors.green[300],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20,
+                  fontWeight: FontWeight.bold)),
+          SizedBox(height: 16),
+      Visibility(
+        visible: _show,
+          child: Text(
+            "\$" + data,
+            textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18,
+                  fontWeight: FontWeight.bold)),
+            ),
+          ],
+      ),
+    );
   }
 
   Widget _searchBar(BuildContext context) {
@@ -82,7 +110,7 @@ class _CompareCityPageState extends State<CompareCityPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 40, right: 30, left: 30, bottom: 200),
+          padding: const EdgeInsets.only(top: 40, right: 30, left: 30, bottom: 50),
           child: Form(
             key: _formKey,
             child: SearchField(
