@@ -1,15 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InterviewPage extends StatefulWidget {
-    const InterviewPage({Key? key}) : super(key: key);
+  const InterviewPage({Key? key}) : super(key: key);
 
-    @override
-    _InterviewPageState createState() => _InterviewPageState();
+  @override
+  _InterviewPageState createState() => _InterviewPageState();
 }
 
 TextEditingController sendDateController = new TextEditingController();
@@ -18,8 +16,8 @@ TextEditingController sendTimeController = new TextEditingController();
 TextEditingController retrieveTimeController = new TextEditingController();
 TextEditingController dataController = new TextEditingController();
 Future<String> str = "" as Future<String>;
-class _InterviewPageState extends State<InterviewPage> {
 
+class _InterviewPageState extends State<InterviewPage> {
   @override
   Widget build(BuildContext context) {
     bool buttonpressed = false;
@@ -29,25 +27,23 @@ class _InterviewPageState extends State<InterviewPage> {
         backgroundColor: Colors.green[400],
         title: Text('Set/View Interviews'),
       ),
-
       body: Container(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-
-              const Padding( //Text that displays "Enter a Date"
+              const Padding(
+                //Text that displays "Enter a Date"
                 padding: EdgeInsets.fromLTRB(8, 16, 8, 8),
                 child: Text(("Schedule a New Interview:"),
-                    style: TextStyle(
-                        fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center),
               ),
-
-              Container( //Text box for typing in a date
+              Container(
+                  //Text box for typing in a date
 
                   child: TextField(
                       controller: sendDateController,
@@ -58,7 +54,6 @@ class _InterviewPageState extends State<InterviewPage> {
                         fillColor: Colors.brown[50],
                         hintText: "Enter date",
                       ),
-
                       readOnly: true,
                       onTap: () async {
                         //when click we have to show the datepicker
@@ -70,19 +65,14 @@ class _InterviewPageState extends State<InterviewPage> {
                             //DateTime.now() - not to allow to choose before today.
                             lastDate: DateTime(2100));
                         if (pickedDate != null) {
-                          String formattedDate = DateFormat('yyyy-MM-dd')
-                              .format(
+                          String formattedDate = DateFormat('yyyy-MM-dd').format(
                               pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                           setState(() {
                             sendDateController.text =
                                 formattedDate; //set formatted date to TextField value.
                           });
                         }
-                      }
-                  )
-              ),
-
-
+                      })),
               Container(
                 child: TextField(
                     controller: sendTimeController,
@@ -93,7 +83,6 @@ class _InterviewPageState extends State<InterviewPage> {
                       fillColor: Colors.brown[50],
                       hintText: "Enter time",
                     ),
-
                     readOnly: true,
                     onTap: () async {
                       TimeOfDay _time = TimeOfDay(hour: 12, minute: 00);
@@ -104,14 +93,11 @@ class _InterviewPageState extends State<InterviewPage> {
                       );
                       if (newTime != null) {
                         setState(() {
-                          sendTimeController.text = newTime.toString()
-                              .substring(10, 15);
+                          sendTimeController.text =
+                              newTime.toString().substring(10, 15);
                         });
                       }
-                    }
-                ),
-
-
+                    }),
               ),
               SizedBox(height: 10),
               ElevatedButton(
@@ -120,28 +106,29 @@ class _InterviewPageState extends State<InterviewPage> {
                   minimumSize: MaterialStateProperty.all(Size(
                       100, 45)), // specify the minimum width and height here
                 ),
-                onPressed: () { // Send Date to Database
+                onPressed: () {
+                  // Send Date to Database
                   sendToDatabase(sendDateController.text.toString(),
                       sendTimeController.text.toString());
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data',
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Processing Data',
                           style: TextStyle(color: Colors.white))));
                 },
-                child: const Text('Set Interview Date/Time',
+                child: const Text(
+                  'Set Interview Date/Time',
                   style: TextStyle(color: Colors.black),
                 ),
-
               ),
-
-
-              const Padding( //Text that displays "Enter a Date"
+              const Padding(
+                //Text that displays "Enter a Date"
                 padding: EdgeInsets.fromLTRB(8, 64, 8, 8),
                 child: Text(("Retrieve Interview Info:"),
-                    style: TextStyle(
-                        fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center),
               ),
-              Container( //Text box for typing in a date
+              Container(
+                  //Text box for typing in a date
 
                   child: TextField(
                       controller: retrieveDateController,
@@ -153,7 +140,6 @@ class _InterviewPageState extends State<InterviewPage> {
                         fillColor: Colors.brown[50],
                         hintText: "Enter date",
                       ),
-
                       readOnly: true,
                       onTap: () async {
                         //when click we have to show the datepicker
@@ -165,18 +151,14 @@ class _InterviewPageState extends State<InterviewPage> {
                             //DateTime.now() - not to allow to choose before today.
                             lastDate: DateTime(2100)); //t
                         if (pickedDate != null) {
-                          String formattedDate = DateFormat('yyyy-MM-dd')
-                              .format(
+                          String formattedDate = DateFormat('yyyy-MM-dd').format(
                               pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                           setState(() {
                             retrieveDateController.text =
                                 formattedDate; //set formatted date to TextField value.
                           });
                         }
-                      }
-                  )
-              ),
-
+                      })),
               Container(
                 child: TextField(
                     controller: retrieveTimeController,
@@ -187,7 +169,6 @@ class _InterviewPageState extends State<InterviewPage> {
                       fillColor: Colors.brown[50],
                       hintText: "Enter time",
                     ),
-
                     readOnly: true,
                     onTap: () async {
                       TimeOfDay _time = TimeOfDay(hour: 12, minute: 00);
@@ -198,14 +179,12 @@ class _InterviewPageState extends State<InterviewPage> {
                       );
                       if (newTime != null) {
                         setState(() {
-                          retrieveTimeController.text = newTime.toString()
-                              .substring(10, 15);
+                          retrieveTimeController.text =
+                              newTime.toString().substring(10, 15);
                         });
                       }
-                    }
-                ),
+                    }),
               ),
-
               SizedBox(height: 10),
               FutureBuilder(
                   builder: (ctx, snapshot) {
@@ -232,8 +211,8 @@ class _InterviewPageState extends State<InterviewPage> {
                           alignment: Alignment.topLeft,
                           child: Text(
                             singleline,
-                            style: TextStyle(
-                                fontSize: 14.4, color: Colors.black),
+                            style:
+                                TextStyle(fontSize: 14.4, color: Colors.black),
                           ),
                         );
                       }
@@ -244,11 +223,8 @@ class _InterviewPageState extends State<InterviewPage> {
                       child: CircularProgressIndicator(),
                     );
                   },
-
                   future: retrieveData(retrieveDateController.text.toString(),
-                      retrieveTimeController.text.toString())
-              ),
-
+                      retrieveTimeController.text.toString())),
             ],
           ),
         ),
@@ -257,63 +233,57 @@ class _InterviewPageState extends State<InterviewPage> {
   }
 }
 
+Future<void> sendToDatabase(String dateStr, String timeStr) async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+  final uid = user?.uid;
 
-  Future<void> sendToDatabase(String dateStr, String timeStr) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
+  DocumentReference<Map<String, dynamic>> interviewJournalRef =
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser?.uid)
+          .collection(dateStr)
+          .doc(timeStr);
 
-    DocumentReference<
-        Map<String, dynamic>> interviewJournalRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(auth.currentUser?.uid).collection(dateStr).doc(timeStr);
+  interviewJournalRef.set({
+    'Date of Interview': dateStr,
+    'Time of Interview': timeStr,
+  });
+}
 
-    interviewJournalRef.set({
-      'Date of Interview': dateStr,
-      'Time of Interview': timeStr,
+Future<String> retrieveData(String dateStr, String timeStr) async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+  final uid = user?.uid;
+  String str = "\n";
+
+  if (dateStr.isEmpty && timeStr.isEmpty) {
+    str += "Please Choose a Date and a Time";
+  } else if (timeStr.isEmpty) {
+    str += "Please Choose a Time";
+  } else if (dateStr.isEmpty) {
+    str += "Please Choose a Date";
+  } else {
+    DocumentReference<Map<String, dynamic>> interviewJournalRef =
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(auth.currentUser?.uid)
+            .collection(dateStr)
+            .doc(timeStr);
+
+    await interviewJournalRef.get().then((querySnapshot) {
+      print("Successfully completed");
+      if (querySnapshot.data().toString() == "null") {
+        str += "No Data";
+      } else {
+        str += " " +
+            querySnapshot
+                .data()
+                .toString()
+                .substring(1, querySnapshot.data().toString().length - 1);
+      }
     });
   }
 
-  Future<String> retrieveData(String dateStr, String timeStr) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
-    String str = "\n";
-
-
-if(dateStr.isEmpty && timeStr.isEmpty)
-  {
-    str += "Please Choose a Date and a Time";
-  }
-else if(timeStr.isEmpty){
-  str += "Please Choose a Time";
+  return str;
 }
-else if(dateStr.isEmpty)
-  {
-    str += "Please Choose a Date";
-  }
-else {
-  DocumentReference<
-      Map<String, dynamic>> interviewJournalRef = FirebaseFirestore.instance
-      .collection('users')
-      .doc(auth.currentUser?.uid).collection(dateStr).doc(timeStr);
-
-  await interviewJournalRef.get().then(
-          (querySnapshot) {
-        print("Successfully completed");
-        if (querySnapshot.data().toString() == "null") {
-          str += "No Data";
-        }
-        else {
-          str += " "+ querySnapshot.data().toString().substring(1, querySnapshot
-              .data()
-              .toString()
-              .length - 1);
-        }
-      }
-  );
-}
-
-    return str;
-  }
-
