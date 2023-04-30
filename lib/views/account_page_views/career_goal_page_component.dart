@@ -4,39 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-/*
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
-}*/
-
-class InitGoal extends StatelessWidget {
-  const InitGoal({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Test change 1',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
-      home: FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print('Error: ${snapshot.error.toString()}');
-            return const Text("Something went wrong!");
-          } else if (snapshot.hasData) {
-            return const CareerGoalPage();
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
-  }
-}
 
 class CareerGoalPage extends StatefulWidget {
   const CareerGoalPage({Key? key}) : super(key: key);
