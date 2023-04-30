@@ -409,7 +409,7 @@ class _GoalCompleteState extends State<GoalComplete> {
                               ],
                             )
                           ]),
-                      Padding(
+                      /*Padding(
                         padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -419,7 +419,7 @@ class _GoalCompleteState extends State<GoalComplete> {
                           child: const Text("Fetch Entry",
                               style: TextStyle(fontSize: 18.0)),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
