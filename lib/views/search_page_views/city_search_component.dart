@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 //test
+
+
+
 class CitySearchPage extends StatefulWidget {
   const CitySearchPage({Key? key}) : super(key: key);
 
@@ -9,11 +13,20 @@ class CitySearchPage extends StatefulWidget {
 }
 
 class _CitySearchPageState extends State<CitySearchPage> {
-
+  /*int jobCountRank = 0;
+  int adjustedRank = 0;
+  int unadjustedRank = 0;*/
 
   String? dropdownValue;
   var CityPicked;
 
+
+ /* late List<rankData> data = [
+    rankData(xval: 'SD Job Count', yval: 0),
+    rankData(xval: 'Adjusted Salary', yval: 0),
+    rankData(xval: 'Unadjusted Salary', yval: 0),
+
+  ];*/
 
   List<String> Cities = [
     'Akron, OH',
@@ -98,8 +111,12 @@ class _CitySearchPageState extends State<CitySearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
+      body: Column(
+      /*GridView.count(
+          crossAxisCount: 1,
+        childAspectRatio: 1.5,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,*/
           children: [
             DropdownButton(
                 hint: Text("Select A City"),
@@ -116,7 +133,6 @@ class _CitySearchPageState extends State<CitySearchPage> {
                     CityPicked = value;
                   });
                 }),
-
             FutureBuilder(
               builder: (ctx, snapshot) {
                 // Checking if future is resolved or not
@@ -156,10 +172,10 @@ class _CitySearchPageState extends State<CitySearchPage> {
               // inorder to display something on the Canvas
               future: getdata(CityPicked),
             ),
+           //_chart()
           ],
         ),
-      ),
-    );
+      );
   }
 
 
@@ -229,7 +245,15 @@ class _CitySearchPageState extends State<CitySearchPage> {
                ++countunadjustedsalary;
                 }
 
-            }
+      /*setState(() {
+        countnumjobs = jobCountRank;
+        countadjustedsalary = adjustedRank;
+        countunadjustedsalary = unadjustedRank;
+        data[0].yval = jobCountRank;
+        data[1].yval = adjustedRank;
+        data[2].yval = unadjustedRank;
+      });*/
+              }
             );
 
     }
@@ -246,6 +270,24 @@ class _CitySearchPageState extends State<CitySearchPage> {
     //print("Outside of Loop"+ x);
     return x;
   }
+
+  /*Widget _chart() {
+    return SfSparkAreaChart.custom(
+      labelDisplayMode: SparkChartLabelDisplayMode.all,
+        dataCount: 3,
+        xValueMapper: (index) => data[index].xval,
+        yValueMapper: (index) => data[index].yval
+    );
+  }*/
+
+
+}
+
+
+class rankData {
+  rankData({required this.xval, required this.yval});
+  final String xval;
+  late int yval;
 }
 
 

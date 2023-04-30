@@ -41,7 +41,7 @@ dependencies:
   just_audio: ^0.9.32
   searchfield: ^0.7.7
   english_words: ^4.0.0-0
-
+  syncfusion_flutter_charts: ^19.3.48
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +78,7 @@ flutter:
     - assets/innerpeace.jpg
     - assets/star-dance-7999.mp3
     - assets/starimage.jpg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
