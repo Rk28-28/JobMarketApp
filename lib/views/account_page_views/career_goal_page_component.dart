@@ -485,7 +485,10 @@ Future<String> getdata(int progressionValue, String goal) async {
     case "1":{progression = 'In-Progress';} break;
     case "-1":{progression = 'no option selected;';} break;
   }
-
+if(goal.isEmpty) {
+  str += " ";
+  }
+else {
   DocumentReference<Map<String, dynamic>> myCareerGoalsRef = FirebaseFirestore
       .instance
       .collection('users')
@@ -496,9 +499,10 @@ Future<String> getdata(int progressionValue, String goal) async {
   myCareerGoalsRef.update({
     'Career Goal Term': progression,
   });
+}
 
   if (goal.isEmpty) {
-    str += "Please Choose a Date";
+    str += "";
   } else {
     DocumentReference<Map<String, dynamic>> myCareerGoalsRef = FirebaseFirestore.instance
         .collection('users')
