@@ -18,7 +18,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: DefaultTabController(
-          length: 2,
+          length: 1,
             child: Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.orange[200],
@@ -26,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
                 indicatorColor: Colors.green,
                 tabs: [
                 Tab(icon: Icon(Icons.location_city)),
-                Tab(icon: Icon(Icons.monetization_on)),
+
                 ],
                ),
                 title: Text('Search Jobs Based On'),
@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
             body: TabBarView(
                 children: [
                   CitySearchScreen(),
-                  SalarySearchScreen()
+
                   ],
 
             )
