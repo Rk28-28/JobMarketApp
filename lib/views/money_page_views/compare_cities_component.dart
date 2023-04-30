@@ -39,6 +39,9 @@ class _CompareCityPageState extends State<CompareCityPage> {
             resizeToAvoidBottomInset: false,
           body: Column(
             children: [
+              SizedBox(height: 20),
+              Text("Search the Cost of a City", style: TextStyle(fontWeight: FontWeight.bold,
+                  fontSize: 20)),
               _searchBar(context),
               FutureBuilder(
                   future: getCityInformation(),
@@ -110,7 +113,7 @@ class _CompareCityPageState extends State<CompareCityPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 40, right: 30, left: 30, bottom: 50),
+          padding: const EdgeInsets.only(top: 20, right: 30, left: 30, bottom: 50),
           child: Form(
             key: _formKey,
             child: SearchField(
