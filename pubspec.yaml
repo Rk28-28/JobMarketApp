@@ -78,6 +78,10 @@ flutter:
     - assets/innerpeace.jpg
     - assets/star-dance-7999.mp3
     - assets/starimage.jpg
+    - assets/demandVid.png
+    - assets/interviewTipsVid.png
+    - assets/salaryVid.png
+    - assets/tedVid.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
