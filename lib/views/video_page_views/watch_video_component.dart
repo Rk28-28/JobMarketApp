@@ -7,6 +7,57 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'video_list.dart';
 
+class VideoButton extends StatelessWidget {
+  final String text;
+  final Function onPressed;
+  final String imageAsset;
+
+  const VideoButton({
+    Key? key,
+    required this.text,
+    required this.onPressed,
+    required this.imageAsset,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed as void Function()?,
+      child: Container(
+        height: 100,
+        width: 170,
+        decoration: BoxDecoration(
+          //border: Border.all(color: Color.fromRGBO(35, 25, 55, 50), width: 5),
+          //borderRadius: BorderRadius.all(Radius.circular(20)),
+          image: DecorationImage(
+            image: AssetImage(imageAsset),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 60.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: Color.fromRGBO(35, 25, 55, 50),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 class WatchVideosPage extends StatefulWidget {
   const WatchVideosPage({Key? key}) : super(key: key);
 
@@ -308,6 +359,10 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                     height: 350.0,
                   child: ListView.separated(
                     itemBuilder: (context, index) {
+                      return VideoButton(text: "",
+                          onPressed: () {},
+                          imageAsset: 'assets/tedVid.png');
+                      /*
                       return YoutubePlayer(
                         key: ObjectKey(_controllers[index]),
                         controller: _controllers[index],
@@ -324,6 +379,8 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
 
 
                       );
+
+                       */
                     },
                     itemCount: _controllers.length,
                     separatorBuilder: (context, _) => const SizedBox(height: 10.0),
