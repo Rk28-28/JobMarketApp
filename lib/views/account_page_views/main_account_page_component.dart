@@ -47,15 +47,7 @@ class _AccountPageState extends State<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                   CircleAvatar(
-                    radius: 50.0,
-                    backgroundColor: Colors.brown[50],
-                    child: Icon(
-                      Icons.person,
-                      size: 60.0,
-                      color: Colors.brown[100],
-                    ),
-                  ),
+                  Image.asset('assets/bee.png'),
                   SizedBox(height: 10.0),
                   Text(
                     getUserName(),

@@ -107,6 +107,28 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 16),
+                      Row(
+                        children:[
+                          Text(
+                            'Popular Cities',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60,
+                            child:
+                              Image.asset('assets/beeLine.png')
+                          ),
+                          SizedBox(
+                              height: 30,
+                              child:
+                              Image.asset('assets/bee.png')
+                          ),
+                        ]
+                      ),
+                      /*
                       const Padding(
                         padding: EdgeInsets.only(left: 16),
                         child: Text(
@@ -117,6 +139,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+                      
+                       */
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
