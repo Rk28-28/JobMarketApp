@@ -221,7 +221,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
                         _gridCard("Mean Software Developer Salary (Adjusted)", "${_dataCity
                             .adjustedSalary}"),
                         _gridCard("Mean Software Developer Salary (Unadjusted)", "${_dataCity
-                            .adjustedSalary}"),
+                            .unadjustedSalary}"),
                         _rankgridCard("Software Developer Job Count Ranking", jobCountRank),
                         _rankgridCard("Adjusted Mean Salary Ranking", adjustedRank),
                         _rankgridCard("Unadjusted Mean Salary Ranking", unadjustedRank),
