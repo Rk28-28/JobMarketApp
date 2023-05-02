@@ -115,6 +115,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.brown[100],
       body: Column(
       /*GridView.count(
           crossAxisCount: 1,

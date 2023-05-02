@@ -189,6 +189,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
         },
       ),
       builder: (context, player) => Scaffold(
+        backgroundColor: Colors.brown[100],
         body:
         SafeArea( child: ListView(
           children: [
