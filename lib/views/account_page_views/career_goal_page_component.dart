@@ -244,41 +244,59 @@ class _CareerGoalPageState extends State<CareerGoalPage> {
     );
   }*/
 }
-
-Future<void> sendToDatabase(
-    int termValue, String goal, int progressionValue) async {
+Future<void> sendToDatabase (int termValue, String goal, int progressionValue) async {
   String term = termValue.toString();
   String progression = progressionValue.toString();
+
   switch (term) {
     case "0":{term = 'Long Term';} break;
     case "1":{term = 'Short Term';} break;
     case "-1":{term = 'no option selected';} break;
   }
   switch(progression){
-    case "0":{progression = 'Complete!';} break;
+    case "0":{progression = 'Complete';} break;
     case "1":{progression = 'In-Progress';} break;
     case "-1":{progression = 'no option selected;';} break;
   }
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  CollectionReference goalsCollection = FirebaseFirestore.instance
+      .collection('users')
+      .doc(auth.currentUser?.uid)
+      .collection('Goals');
+
+  QuerySnapshot querySnapshot = await goalsCollection.get();
+
+  int count = querySnapshot.size;
+
   DateTime now = DateTime.now();
   var formatter = DateFormat('yyyy-MM-dd hh:mm');
   String dateStr = formatter.format(now);
+
+  CollectionReference<Map<String, dynamic>> coll = FirebaseFirestore
+      .instance
+      .collection('users')
+      .doc(auth.currentUser?.uid)
+      .collection('Goals');
+
 
   DocumentReference<Map<String, dynamic>> myCareerGoalsRef = FirebaseFirestore
       .instance
       .collection('users')
       .doc(auth.currentUser?.uid)
       .collection('Goals')
-      .doc(dateStr);
+      .doc((count+1).toString());
 
   myCareerGoalsRef.set({
     'Length of Goal': term,
     'Goal': goal,
     'Career Goal Term': progression,
   });
+
 }
+
+
 
 class GoalComplete extends StatefulWidget {
   const GoalComplete({Key? key}) : super(key: key);
@@ -295,13 +313,28 @@ var _formKey = GlobalKey<FormState>();
 int _progressionValue = -1;
 
 class _GoalCompleteState extends State<GoalComplete> {
+  late List<Map<String, dynamic>> allData = [];
   DatabaseReference dbRef = FirebaseDatabase.instance.ref('liked');
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _saved = <WordPair>{};
   List<Map<dynamic, dynamic>> dataList = [];
+  FirebaseAuth autho = FirebaseAuth.instance;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    makeList().then((result) {
+      setState(() {
+        allData;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    makeList();
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
@@ -314,7 +347,119 @@ class _GoalCompleteState extends State<GoalComplete> {
           child: const Icon(Icons.arrow_back_ios),
         ),
       ),
-      body: Container(
+      body:
+      ListView.builder(
+        itemCount: allData.length,
+        itemBuilder: (BuildContext context, int index) {
+          final data = allData[index];
+          Color? tileColor = Colors.orange[200];
+          if (data['Career Goal Term'] == 'Complete') {
+            tileColor = Colors.green[200];
+          }
+          return ListTile(
+            key: ValueKey((index+1).toString()),
+            title: Text(data['Goal']),
+            onTap: () {
+              _showDescription(context, allData[index]['Goal']!,
+                  allData[index]['Career Goal Term']!,
+                  allData[index]['Length of Goal']!);
+            },
+            trailing: Checkbox(
+              value: allData[index]['Career Goal Term'] == 'Complete',
+              onChanged: (bool? value) async {
+                if (value != null) {
+                  // Update the progress of the goal in the database
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(autho.currentUser?.uid)
+                      .collection('Goals')
+                      .doc((index+1).toString())
+                      .update({
+                    'Career Goal Term': value ? 'Complete' : 'In-Progress'
+                  });
+                  // Update the local copy of the data
+                  setState(() {
+                    allData[index]['Career Goal Term'] = value ? 'Complete' : 'In Progress';
+                    if (data['Career Goal Term'] == 'Complete') {
+                      tileColor = Colors.green[200];
+                    }
+                  });
+                }
+              },
+            ),
+            tileColor: tileColor,
+          );
+        },
+      ),
+     /* ListView(
+          children: [
+            for (var i = 0; i < allData.length; i++)
+        // ADD FOR LOOP AND IF STATEMENT HERE
+              if (allData[i]['Career Goal Term'] as String == 'In-Progress')
+                ListTile(
+                  tileColor: Colors.orange[200],
+                  key: Key(i.toString()),
+                  title: Text(allData[i]['Goal']!, style: TextStyle (fontWeight: FontWeight.bold, fontSize: 20)),
+                  onTap: () {
+                    _showDescription(context, allData[i]['Goal']!,
+                        allData[i]['Career Goal Term']!,
+                        allData[i]['Length of Goal']!);
+                  },
+                  trailing: Checkbox(
+                   value: allData[i]['Career Goal Term'] == 'Complete',
+                    onChanged: (bool? value) async {
+                      if (value != null) {
+                  // Update the progress of the goal in the database
+                       await FirebaseFirestore.instance
+                           .collection('users')
+                           .doc(autho.currentUser?.uid)
+                           .collection('Goals')
+                           .doc((i+1).toString())
+                          .update({
+                          'Career Goal Term': value ? 'Completed' : 'In-Progress'
+                        });
+                  // Update the local copy of the data
+                       setState(() {
+                          allData[i]['Career Goal Term'] = value ? 'Complete' : 'In Progress';
+                        });
+                      }
+                   },
+                 ),
+               ),
+            for (var i = 0; i < allData.length; i++)
+            if (allData[i]['Career Goal Term'] as String == 'Complete')
+          ListTile(
+            tileColor: Colors.green[200],
+            key: Key(i.toString()),
+            title: Text(allData[i]['Goal']!, style: TextStyle (fontWeight: FontWeight.bold, fontSize: 20)),
+            onTap: () {
+              _showDescription(context, allData[i]['Goal']!,
+                  allData[i]['Career Goal Term']!,
+                  allData[i]['Length of Goal']!);
+            },
+            trailing: Checkbox(
+              value: allData[i]['Career Goal Term'] == 'Complete',
+              onChanged: (bool? value) async {
+                if (value != null) {
+                  // Update the progress of the goal in the database
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(autho.currentUser?.uid)
+                      .collection('Goals')
+                      .doc((i+1).toString())
+                      .update({
+                    'Career Goal Term': value ? 'Completed' : 'In-Progress'
+                  });
+                  // Update the local copy of the data
+                  setState(() {
+                    allData[i]['Career Goal Term'] = value ? 'Complete' : 'In Progress';
+                  });
+                }
+              },
+            ),
+          ),
+         // ListTile()
+    /*Container(
         width: double.infinity,
         height: double.infinity,
         child: Column(
@@ -470,9 +615,49 @@ class _GoalCompleteState extends State<GoalComplete> {
             ),
           ],
         ),
-      ),
+      ),*/
+    ],
+    ),*/
     );
   }
+
+
+
+  Future<void> makeList() async {
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('users').doc(auth.currentUser?.uid)
+        .collection('Goals');
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+    allData =
+    querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+print(allData);
+
+  }
+
+
+  void _showDescription(BuildContext context, String title,
+      String progress, String term) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(progress + "\n" + term),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK', style: TextStyle(color: Colors.green)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
 
 Future<String> getdata(int progressionValue, String goal) async {
@@ -531,4 +716,8 @@ String loop(String data) {
   String s = data.toString();
   return s;
 }
+
+
+
+
 
