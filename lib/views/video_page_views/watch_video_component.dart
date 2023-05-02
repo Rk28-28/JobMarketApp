@@ -7,6 +7,8 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'video_list.dart';
 
+//some code taken from https://pub.dev/packages/youtube_player_flutter
+
 class VideoButton extends StatelessWidget {
   final String text;
   final Function onPressed;
@@ -27,8 +29,6 @@ class VideoButton extends StatelessWidget {
         height: 100,
         width: 170,
         decoration: BoxDecoration(
-          //border: Border.all(color: Color.fromRGBO(35, 25, 55, 50), width: 5),
-          //borderRadius: BorderRadius.all(Radius.circular(20)),
           image: DecorationImage(
             image: AssetImage(imageAsset),
             fit: BoxFit.fill,
@@ -146,13 +146,6 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
       ),
     )
         .toList();
-    /*
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Watch'),
-      ),
-    );
-     */
     return YoutubePlayerBuilder(
       onExitFullScreen: () {
         // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
@@ -217,116 +210,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                   ),
                   ),
                   _space,
-                  /*
-                  _text('Channel', _videoMetaData.author),
-                  _space,
-                  _text('Video Id', _videoMetaData.videoId),
-                  _space,
 
-
-                  Row(
-                    children: [
-                      _text(
-                        'Playback Quality',
-                        _controller.value.playbackQuality ?? '',
-                      ),
-                      const Spacer(),
-                      _text(
-                        'Playback Rate',
-                        '${_controller.value.playbackRate}x  ',
-                      ),
-                    ],
-                  ),
-                  _space,
-
-
-                  TextField(
-                    enabled: _isPlayerReady,
-                    controller: _idController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Enter youtube \<video id\> or \<link\>',
-                      fillColor: Colors.blueAccent.withAlpha(20),
-                      filled: true,
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.blueAccent,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () => _idController.clear(),
-                      ),
-                    ),
-                  ),
-
-
-                  _space,
-                  Row(
-                    children: [
-                      _loadCueButton('LOAD'),
-                      const SizedBox(width: 10.0),
-                      _loadCueButton('CUE'),
-                    ],
-                  ),
-                  _space,
-
-                   */
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.skip_previous),
-                        onPressed: _isPlayerReady
-                            ? () => _controller.load(_ids[
-                        (_ids.indexOf(_controller.metadata.videoId) -
-                            1) %
-                            _ids.length])
-                            : null,
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          _controller.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow,
-                        ),
-                        onPressed: _isPlayerReady
-                            ? () {
-                          _controller.value.isPlaying
-                              ? _controller.pause()
-                              : _controller.play();
-                          setState(() {});
-                        }
-                            : null,
-                      ),
-                      IconButton(
-                        icon: Icon(_muted ? Icons.volume_off : Icons.volume_up),
-                        onPressed: _isPlayerReady
-                            ? () {
-                          _muted
-                              ? _controller.unMute()
-                              : _controller.mute();
-                          setState(() {
-                            _muted = !_muted;
-                          });
-                        }
-                            : null,
-                      ),
-                      FullScreenButton(
-                        controller: _controller,
-                        color: Colors.orangeAccent,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.skip_next),
-                        onPressed: _isPlayerReady
-                            ? () => _controller.load(_ids[
-                        (_ids.indexOf(_controller.metadata.videoId) +
-                            1) %
-                            _ids.length])
-                            : null,
-                      ),
-                    ],
-                  ),
-                  _space,
                   Row(
                     children: <Widget>[
                       const Text(
@@ -357,55 +241,36 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
                   _space,
                   SizedBox(
                     height: 350.0,
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return VideoButton(text: "",
-                          onPressed: () {},
-                          imageAsset: 'assets/tedVid.png');
-                      /*
-                      return YoutubePlayer(
-                        key: ObjectKey(_controllers[index]),
-                        controller: _controllers[index],
-
-                        actionsPadding: const EdgeInsets.only(left: 16.0),
-                        bottomActions: [
-                          CurrentPosition(),
-                          const SizedBox(width: 10.0),
-                          ProgressBar(isExpanded: true),
-                          const SizedBox(width: 10.0),
-                          RemainingDuration(),
-                          FullScreenButton(),
-                        ],
-
-
-                      );
-
-                       */
-                    },
-                    itemCount: _controllers.length,
-                    separatorBuilder: (context, _) => const SizedBox(height: 10.0),
+                    width: 2.0,
+                  child: GridView.count(
+                    crossAxisCount: 1,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: 2.0,
+                      children: [
+                          VideoButton(text: "",
+                          onPressed: () {
+                            _controller.load('ppf9j8x0LA8');
+                          },
+                          imageAsset: 'assets/tedVid.png'),
+                        VideoButton(text: "",
+                          onPressed: () {
+                            _controller.load('J30wmYgzVXM');
+                          },
+                          imageAsset: 'assets/salaryVid.png'),
+                        VideoButton(text: "",
+                          onPressed: () {
+                            _controller.load('84Ja3XadHTk');
+                          },
+                          imageAsset: 'assets/demandVid.png'),
+                        VideoButton(text: "",
+                          onPressed: () {
+                            _controller.load('qpkegRmPgis');
+                          },
+                          imageAsset: 'assets/interviewTipsVid.png'),
+                       ]
                   ),
                   ),
-                  /*
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 800),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: _getStateColor(_playerState),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      _playerState.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-
-                   */
-
                 ],
               ),
             ),
@@ -416,87 +281,7 @@ class _WatchVideosPageState extends State<WatchVideosPage> {
     );
   }
 
-
-Widget _text(String title, String value) {
-  return RichText(
-    text: TextSpan(
-      text: '$title : ',
-      style: const TextStyle(
-        color: Colors.blueAccent,
-        fontWeight: FontWeight.bold,
-      ),
-      children: [
-        TextSpan(
-          text: value,
-          style: const TextStyle(
-            color: Colors.blueAccent,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Color _getStateColor(PlayerState state) {
-  switch (state) {
-    case PlayerState.unknown:
-      return Colors.grey[700]!;
-    case PlayerState.unStarted:
-      return Colors.pink;
-    case PlayerState.ended:
-      return Colors.red;
-    case PlayerState.playing:
-      return Colors.blueAccent;
-    case PlayerState.paused:
-      return Colors.orange;
-    case PlayerState.buffering:
-      return Colors.yellow;
-    case PlayerState.cued:
-      return Colors.blue[900]!;
-    default:
-      return Colors.blue;
-  }
-}
-
 Widget get _space => const SizedBox(height: 10);
-
-Widget _loadCueButton(String action) {
-  return Expanded(
-    child: MaterialButton(
-      color: Colors.blueAccent,
-      onPressed: _isPlayerReady
-          ? () {
-        if (_idController.text.isNotEmpty) {
-          var id = YoutubePlayer.convertUrlToId(
-            _idController.text,
-          ) ??
-              '';
-          if (action == 'LOAD') _controller.load(id);
-          if (action == 'CUE') _controller.cue(id);
-          FocusScope.of(context).requestFocus(FocusNode());
-        } else {
-          _showSnackBar('Source can\'t be empty!');
-        }
-      }
-          : null,
-      disabledColor: Colors.grey,
-      disabledTextColor: Colors.black,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 14.0),
-        child: Text(
-          action,
-          style: const TextStyle(
-            fontSize: 18.0,
-            color: Colors.white,
-            fontWeight: FontWeight.w300,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    ),
-  );
-}
 
 void _showSnackBar(String message) {
   ScaffoldMessenger.of(context).showSnackBar(
