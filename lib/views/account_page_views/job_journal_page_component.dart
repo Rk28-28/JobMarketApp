@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -166,6 +168,7 @@ class _JobJournalPageState extends State<JobJournalPage> {
                   });
                 },
               ),
+
               Padding(
                 padding: EdgeInsets.fromLTRB(8, 4, 16, 4),
                 child: Row(
@@ -173,6 +176,22 @@ class _JobJournalPageState extends State<JobJournalPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [Text('Terrible'), Text('Fantastic')],
                 ),
+              ),
+              _space,
+              Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  children: [SizedBox(
+                    height: 40,
+                    child:
+                    Image.asset('assets/reverseBee.png')
+                  ),
+                  SizedBox(
+                    height: 60,
+                    child:
+                    Image.asset('assets/reverseLine.png')
+                  ),
+                  ]
+
               ),
               Flexible(
                 child: Align(
@@ -226,3 +245,5 @@ Future<void> sendToDatabase(String jobStr, String dateStr, String timeStr,
     'Interview Rating': interviewValue
   });
 }
+
+Widget get _space => const SizedBox(height: 50);
