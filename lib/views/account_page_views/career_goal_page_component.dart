@@ -320,6 +320,8 @@ class _GoalCompleteState extends State<GoalComplete> {
   List<Map<dynamic, dynamic>> dataList = [];
   FirebaseAuth autho = FirebaseAuth.instance;
 
+
+
   @override
   void initState() {
     super.initState();
@@ -329,6 +331,7 @@ class _GoalCompleteState extends State<GoalComplete> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     makeList();
@@ -632,6 +635,7 @@ class _GoalCompleteState extends State<GoalComplete> {
     allData =
     querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
 print(allData);
+
   }
 
 
