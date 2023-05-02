@@ -123,7 +123,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
         crossAxisSpacing: 16,*/
           children: [
             _searchBar(context),
-            DropdownButton(
+            /*DropdownButton(
                 hint: Text("Select A City"),
                 value: _selectedCity,
                 alignment: AlignmentDirectional.center,
@@ -137,8 +137,8 @@ class _CitySearchPageState extends State<CitySearchPage> {
                   setState(() {
                     _selectedCity = value;
                   });
-                }),
-            FutureBuilder(
+                }),*/
+           FutureBuilder(
               builder: (ctx, snapshot) {
                 // Checking if future is resolved or not
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -168,9 +168,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
                 }
 
                 // Displaying LoadingSpinner to indicate waiting state
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const SizedBox(height: 0);
               },
 
               // Future that needs to be resolved
@@ -224,6 +222,9 @@ class _CitySearchPageState extends State<CitySearchPage> {
                             .adjustedSalary}"),
                         _gridCard("Mean Software Developer Salary (Unadjusted)", "${_dataCity
                             .adjustedSalary}"),
+                        _rankgridCard("Software Developer Job Count Ranking", jobCountRank),
+                        _rankgridCard("Adjusted Mean Salary Ranking", adjustedRank),
+                        _rankgridCard("Unadjusted Mean Salary Ranking", unadjustedRank),
                       ],
                     ),
                   );
@@ -232,6 +233,30 @@ class _CitySearchPageState extends State<CitySearchPage> {
           ],
         ),
       );
+  }
+
+
+  Widget _rankgridCard(String title, String data) {
+    return Card(
+      color: Colors.green[300],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20,
+                  fontWeight: FontWeight.bold)),
+          SizedBox(height: 16),
+          Visibility(
+            visible: _show,
+            child: Text(data,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _gridCard(String title, String data){
@@ -298,9 +323,10 @@ class _CitySearchPageState extends State<CitySearchPage> {
     );
 
   }
-  String unadjustedRank = '';
   String jobCountRank = '';
+  String unadjustedRank = '';
   String adjustedRank = '';
+
   Future<String> getdata(cityPicked) async {
     DocumentReference<Map<String, dynamic>> diaryRef = FirebaseFirestore
         .instance
@@ -377,13 +403,13 @@ class _CitySearchPageState extends State<CitySearchPage> {
     }
   if(x != "")
   {
-    x += " Software Developer Job Count Ranking: " +
-        countnumjobs.toString() + ' of 77 \n\n';
-    x += " Adjusted Mean Salary Ranking: " + countadjustedsalary.toString() +
-        ' of 77 \n\n';
-    x +=
-        " Unadjusted Mean Salary Ranking: " + countunadjustedsalary.toString() +
-            ' of 77 \n\n';
+    setState(() {
+      jobCountRank = countnumjobs.toString() + ' of 77 \n\n';
+      adjustedRank = countadjustedsalary.toString() +
+          ' of 77 \n\n';
+      unadjustedRank = countunadjustedsalary.toString() +
+              ' of 77 \n\n';
+    });
   }
     //print("Outside of Loop"+ x);
     return x;
@@ -409,6 +435,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
         snapshot["meanSoftwareDeveloperSalaryUnadjusted"]);
 
     }
+
 }
 
 class City {
